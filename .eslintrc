@@ -8,7 +8,8 @@
   "rules": {
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
-    "react/react-in-jsx-scope": 2
+    "react/react-in-jsx-scope": 2,
+    "indent": [2, 4, {"indentSwitchCase": true}]
   },
   "plugins": [
     "react"
