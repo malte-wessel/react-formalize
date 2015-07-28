@@ -1,25 +1,23 @@
 {
-  "name": "library-boilerplate-example",
-  "version": "1.0.0",
-  "description": "library-boilerplate-example-description",
+  "name": "react-formalize-example-simple",
+  "version": "0.1.0",
+  "description": "Simple example",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/library-boilerplate-author/library-boilerplate.git"
+    "url": "https://github.com/malte-wessel/react-formalize.git"
   },
-  "keywords": [
-    "library-boilerplate-keywords"
-  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/library-boilerplate-author/library-boilerplate/issues"
+    "url": "https://github.com/malte-wessel/react-formalize/issues"
   },
-  "homepage": "https://github.com/library-boilerplate-author/library-boilerplate",
+  "homepage": "https://github.com/malte-wessel/react-formalize",
   "dependencies": {
-    "react": "^0.13.3"
+    "react": "^0.14.0-beta1",
+    "react-dom": "^0.14.0-beta1"
   },
   "devDependencies": {
     "babel-core": "^5.6.18",
