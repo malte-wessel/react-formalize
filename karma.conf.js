@@ -7,7 +7,7 @@ module.exports = function karmaConf(config) {
 
         browsers: [ 'Chrome' ],
 
-        singleRun: false,
+        singleRun: true,
 
         frameworks: [ 'mocha' ],
 

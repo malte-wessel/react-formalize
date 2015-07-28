@@ -1,12 +1,12 @@
 {
   "name": "react-formalize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Serialize react forms",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib dist",
     "build": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/library-boilerplate.js && NODE_ENV=production webpack src/index.js dist/library-boilerplate.min.js",
+    "build:umd": "webpack src/index.js dist/react-formalize.js && NODE_ENV=production webpack src/index.js dist/react-formalize.min.js",
     "lint": "eslint src test examples",
     "test": "NODE_ENV=test karma start",
     "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd"
@@ -21,7 +21,7 @@
     "serialze",
     "submit"
   ],
-  "author": "library-boilerplate-author",
+  "author": "Malte Wessel",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/malte-wessel/react-formalize/issues"

@@ -29,7 +29,7 @@ module.exports = {
         }]
     },
     output: {
-        library: 'library-boilerplate',
+        library: 'react-formalize',
         libraryTarget: 'umd'
     },
     plugins: plugins,
