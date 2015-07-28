@@ -12,6 +12,7 @@ export default class Input extends React.Component {
             React.PropTypes.object,
             React.PropTypes.string
        ]),
+       serialize: PropTypes.func.isRequired,
        children: PropTypes.func
     };
 
@@ -42,10 +43,9 @@ export default class Input extends React.Component {
     }
 
     handleChange(e) {
-        const target = e.target || e.currentTarget;
-        const { name } = this.props;
-        const { value } = target;
+        const { name, serialize } = this.props;
         const { setValue } = this.context;
+        const value = serialize(e);
         setValue(name, value);
     }
 

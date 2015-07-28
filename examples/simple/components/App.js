@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Form } from 'react-formalize';
-import TextInput from './TextInput';
+import { Form, Text, Checkbox } from 'react-formalize';
 
 const mock = {
     title: 'Hello World',
-    description: 'Just a simple example'
+    description: 'Just a simple example',
+    publish: false
 };
 
 export default class App extends Component {
@@ -20,11 +20,15 @@ export default class App extends Component {
                 <Form data={mock} onSubmit={this.handleSubmit}>
                     <div>
                         <label>Title</label>
-                        <TextInput name="title"/>
+                        <Text name="title"/>
                     </div>
                     <div>
                         <label>Description</label>
-                        <TextInput name="description"/>
+                        <Text name="description"/>
+                    </div>
+                    <div>
+                        <label>Publish</label>
+                        <Checkbox name="publish"/> publish this post
                     </div>
                     <div>
                         <button type="submit">Submit</button>
