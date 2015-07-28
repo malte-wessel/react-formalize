@@ -14,7 +14,8 @@ export default class Form extends React.Component {
             PropTypes.arrayOf(PropTypes.element)
         ]),
         data: PropTypes.object,
-        onSubmit: PropTypes.func
+        onSubmit: PropTypes.func,
+        onChange: PropTypes.func
     };
 
     static defaultProps = {
@@ -79,14 +80,17 @@ export default class Form extends React.Component {
         // @TODO: Refactor, better performance
         const data = cloneDeep(this.state.data);
         objectPath.set(data, key, value);
+
+        const { onChange } = this.props;
+        if (onChange) onChange(data);
+
         this.setState({ data }, () => {
             this.listeners.forEach(listener => listener());
         });
     }
 
     render() {
-        const props = this.props;
-
+        const { onChange, ...props } = this.props;
         return (
             <form
                 {...props}
