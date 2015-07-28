@@ -8,9 +8,7 @@
     "build": "babel src --out-dir lib",
     "build:umd": "webpack src/index.js dist/library-boilerplate.js && NODE_ENV=production webpack src/index.js dist/library-boilerplate.min.js",
     "lint": "eslint src test examples",
-    "test": "NODE_ENV=test mocha --compilers js:babel/register --recursive",
-    "test:watch": "NODE_ENV=test mocha --compilers js:babel/register --recursive --watch",
-    "test:cov": "babel-node ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha -- --recursive",
+    "test": "NODE_ENV=test karma start",
     "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd"
   },
   "repository": {
@@ -38,14 +36,23 @@
     "eslint-config-airbnb": "0.0.6",
     "eslint-plugin-react": "^2.3.0",
     "expect": "^1.6.0",
-    "isparta": "^3.0.3",
+    "karma": "0.12.*",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-cli": "^0.1.0",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.0.3",
+    "karma-sourcemap-loader": "^0.3.5",
+    "karma-webpack": "^1.6.0",
     "mocha": "^2.2.5",
     "react": "^0.14.0-beta1",
+    "react-dom": "^0.14.0-beta1",
     "rimraf": "^2.3.4",
     "webpack": "^1.9.6",
     "webpack-dev-server": "^1.8.2"
   },
   "dependencies": {
-    "invariant": "^2.0.0"
+    "invariant": "^2.0.0",
+    "lodash": "^3.10.0",
+    "object-path": "^0.9.2"
   }
 }

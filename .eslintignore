@@ -2,3 +2,5 @@ lib
 **/node_modules
 **/webpack.config.js
 examples/**/server.js
+karma.conf.js
+tests.webpack.js
