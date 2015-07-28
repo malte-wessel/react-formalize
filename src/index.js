@@ -1,3 +1,7 @@
-export function add(x, y) {
-  return x + y;
-}
+import Form from './components/Form';
+import Input from './components/Input';
+
+export default {
+    Form,
+    Input
+};
