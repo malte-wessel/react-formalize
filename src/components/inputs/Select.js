@@ -26,11 +26,7 @@ export default class Select extends React.Component {
         const {children, ...props} = this.props;
         return (
             <Input serialize={this.serialize} {...props}>
-                {sprops => {
-                    return (
-                        <select {...sprops}>{children}</select>
-                    );
-                }}
+                {innerProps => <select {...innerProps}>{children}</select>}
             </Input>
         );
     }
