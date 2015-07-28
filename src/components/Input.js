@@ -42,10 +42,10 @@ export default class Input extends React.Component {
         this.unregister();
     }
 
-    handleChange(e) {
+    handleChange(event) {
         const { name, serialize } = this.props;
         const { setValue } = this.context;
-        const value = serialize(e);
+        const value = serialize(event);
         setValue(name, value);
     }
 
