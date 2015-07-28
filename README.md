@@ -1,4 +1,4 @@
 react-formalize
 =========================
 
-WIP
+Work in progress!
