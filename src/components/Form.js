@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
-import objectPath from 'object-path';
-
-import cloneDeep from 'lodash/lang/cloneDeep';
-import each from 'lodash/collection/each';
-import merge from 'lodash/object/merge';
+import update from 'react-addons-update';
+import { set as setPath, get as getPath } from 'object-path';
+import merge from 'deepmerge';
+import makePath from '../utils/makePath';
 
 export default class Form extends React.Component {
 
@@ -30,8 +29,10 @@ export default class Form extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        // set initial state
         const { data } = this.props;
         this.state = { data };
+
         this.inputs = {};
         this.listeners = [];
     }
@@ -39,26 +40,36 @@ export default class Form extends React.Component {
     getChildContext() {
         return {
             register: this.register.bind(this),
-            getValue: this.getValueForInput.bind(this),
-            setValue: this.setValueForInput.bind(this)
+            getValue: this.getValue.bind(this),
+            setValue: this.setValue.bind(this)
         };
     }
 
     componentDidMount() {
         // Now all inputs are registered
-        // @TODO: Refactor, better performance
-        const data = {};
-        each(this.inputs, (initialValue, name) => {
-            objectPath.set(data, name, initialValue);
-        });
-        merge(data, this.state.data);
+        const { inputs } = this;
+        const inputData = {};
+
+        // Run through registered inputs and create an object path with
+        // the initial value, given by the input
+        for (let path in inputs) {
+            if (!inputs.hasOwnProperty(path)) continue;
+            let initialValue = inputs[path];
+            setPath(inputData, path, initialValue);
+        }
+
+        // Merge with current state
+        const data = merge(inputData, this.state.data);
+
         this.setState({ data });
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleSubmit(event) {
         const { onSubmit } = this.props;
-        if (onSubmit) onSubmit(this.state.data);
+        if (onSubmit) {
+            event.preventDefault();
+            onSubmit(this.state.data);
+        }
     }
 
     register(name, initialValue, listener) {
@@ -71,15 +82,14 @@ export default class Form extends React.Component {
         };
     }
 
-    getValueForInput(key) {
+    getValue(key) {
         const { data } = this.state;
-        return objectPath.get(data, key);
+        return getPath(data, key);
     }
 
-    setValueForInput(key, value) {
-        // @TODO: Refactor, better performance
-        const data = cloneDeep(this.state.data);
-        objectPath.set(data, key, value);
+    setValue(key, value) {
+        const mutation = makePath(key + '.$set', value);
+        const data = update(this.state.data, mutation);
 
         const { onChange } = this.props;
         if (onChange) onChange(data);
@@ -90,7 +100,7 @@ export default class Form extends React.Component {
     }
 
     render() {
-        const { onChange, ...props } = this.props;
+        const { onChange, onSubmit, ...props } = this.props;
         return (
             <form
                 {...props}
