@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Text, Checkbox } from 'react-formalize';
+import { Form, Text, Checkbox, Select } from 'react-formalize';
 
 const mock = {
-    title: 'Hello World',
-    description: 'Just a simple example',
-    publish: false
+    title: 'Hello World'
 };
 
 export default class App extends Component {
@@ -29,6 +27,13 @@ export default class App extends Component {
                     <div>
                         <label>Publish</label>
                         <Checkbox name="publish"/> publish this post
+                    </div>
+                    <div>
+                        <label>Category</label>
+                        <Select name="category">
+                            <option value="news">News</option>
+                            <option value="foo">Foo</option>
+                        </Select>
                     </div>
                     <div>
                         <button type="submit">Submit</button>
