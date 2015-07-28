@@ -4,6 +4,7 @@ import Input from './components/Input';
 import Text from './components/inputs/Text';
 import Checkbox from './components/inputs/Checkbox';
 import Select from './components/inputs/Select';
+import RadioGroup from './components/inputs/RadioGroup';
 
 export default {
     Form,
@@ -11,5 +12,6 @@ export default {
 
     Text,
     Checkbox,
-    Select
+    Select,
+    RadioGroup
 };
