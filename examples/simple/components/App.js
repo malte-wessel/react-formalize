@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Form, Text, Checkbox, Select, RadioGroup } from 'react-formalize';
+import {
+    Form,
+    Text,
+    TextArea,
+    Checkbox,
+    RadioGroup,
+    Select } from 'react-formalize';
 
 const mock = {
     title: 'Hello World'
@@ -7,22 +13,26 @@ const mock = {
 
 export default class App extends Component {
 
+    handleChange(data) {
+        console.info('Change', data);
+    }
+
     handleSubmit(data) {
-        alert(JSON.stringify(data));
+        console.info('Submit', data);
     }
 
     render() {
         return (
             <div>
                 <h1>Simple example</h1>
-                <Form data={mock} onSubmit={this.handleSubmit}>
+                <Form data={mock} onSubmit={this.handleSubmit} onChange={this.handleChange}>
                     <div>
                         <label>Title</label>
                         <Text name="title"/>
                     </div>
                     <div>
-                        <label>Description</label>
-                        <Text name="description"/>
+                        <label>Text</label>
+                        <TextArea name="description"/>
                     </div>
                     <div>
                         <label>Category</label>
@@ -40,8 +50,8 @@ export default class App extends Component {
                         <RadioGroup name="public">
                             {Radio => (
                                 <div>
-                                    <Radio value="true"/> public
-                                    <Radio value="false"/> private
+                                    <Radio value="public"/> public
+                                    <Radio value="private"/> private
                                 </div>
                             )}
                         </RadioGroup>
