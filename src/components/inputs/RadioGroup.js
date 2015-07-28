@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Input from '../Input';
 
 function radio(name, selectedValue, onChange) {
@@ -17,6 +17,10 @@ function radio(name, selectedValue, onChange) {
 }
 
 export default class RadioGroup extends React.Component {
+
+    static propTypes = {
+        name: PropTypes.string.isRequired
+    }
 
     serialize(value) {
         return value;

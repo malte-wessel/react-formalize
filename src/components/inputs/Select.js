@@ -4,6 +4,7 @@ import Input from '../Input';
 export default class Select extends React.Component {
 
     static propTypes = {
+        name: PropTypes.string.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.element,
             PropTypes.arrayOf(PropTypes.element)

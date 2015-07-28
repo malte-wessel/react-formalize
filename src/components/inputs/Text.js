@@ -4,6 +4,7 @@ import Input from '../Input';
 export default class Text extends React.Component {
 
     static propTypes = {
+        name: PropTypes.string.isRequired,
         type: PropTypes.oneOf([
             'date',
             'datetime',
