@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Input from '../Input';
 
 export default class Checkbox extends React.Component {
