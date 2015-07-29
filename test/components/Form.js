@@ -26,7 +26,9 @@ describe('Form', () => {
 
         const tree = renderIntoDocument(
             <Form>
-                <Child/>
+                <div>
+                    <Child/>
+                </div>
             </Form>
         );
 
@@ -64,7 +66,7 @@ describe('Form', () => {
             boo: 'baz',
             qux: {
                 boo: 'bar',
-                qoo: ''
+                qoo: null
             }
         });
     });
