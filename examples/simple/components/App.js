@@ -42,6 +42,15 @@ export default class App extends Component {
                         </Select>
                     </div>
                     <div>
+                        <label>Category</label>
+                        <Select name="subcategory" multiple={true}>
+                            <option value="news">News</option>
+                            <option value="sport">Sport</option>
+                            <option value="technology">Technology</option>
+                            <option value="entertainment">Entertainment</option>
+                        </Select>
+                    </div>
+                    <div>
                         <label>Publish</label>
                         <Checkbox name="publish"/> publish this post
                     </div>
