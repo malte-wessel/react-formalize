@@ -16,6 +16,10 @@ export default class Input extends React.Component {
        children: PropTypes.func
     };
 
+    static defaultProps = {
+        value: null
+    }
+
     static contextTypes = {
         register: PropTypes.func,
         getValue: PropTypes.func,

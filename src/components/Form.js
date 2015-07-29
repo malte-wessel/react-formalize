@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 import update from 'react-addons-update';
-import { set as setPath, get as getPath } from 'object-path';
+import { set as setPath, get as getPath, has as hasPath } from 'object-path';
 import merge from 'deepmerge';
+import invariant from 'invariant';
+
 import makePath from '../utils/makePath';
 
 export default class Form extends React.Component {
@@ -73,6 +75,12 @@ export default class Form extends React.Component {
     }
 
     register(name, initialValue, listener) {
+        invariant(
+            this.inputs[name] === undefined,
+            'Naming conflict: there is already an input field with name `%s`',
+            name
+        );
+
         this.inputs[name] = initialValue;
         this.listeners.push(listener);
         return () => {
