@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Input from '../Input';
 
-export default class Checkbox extends React.Component {
+export default class Checkbox extends Component {
 
     static propTypes = {
         name: PropTypes.string.isRequired
@@ -17,10 +17,10 @@ export default class Checkbox extends React.Component {
 
     render() {
         return (
-            <Input serialize={this.serialize} {...this.props}>
+            <Input serialize={this.serialize} value={false} {...this.props}>
                 {({value, ...props}) => {
                     const checked = !!value;
-                    return <input type="checkbox" value="true" checked={checked} {...props}/>;
+                    return <input type="checkbox" value={true} checked={checked} {...props}/>;
                 }}
             </Input>
         );

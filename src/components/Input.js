@@ -16,10 +16,6 @@ export default class Input extends React.Component {
        children: PropTypes.func
     };
 
-    static defaultProps = {
-        value: ''
-    }
-
     static contextTypes = {
         register: PropTypes.func,
         getValue: PropTypes.func,
@@ -42,10 +38,10 @@ export default class Input extends React.Component {
         this.unregister();
     }
 
-    handleChange(event) {
+    handleChange(...args) {
         const { name, serialize } = this.props;
         const { setValue } = this.context;
-        const value = serialize(event);
+        const value = serialize(...args);
         setValue(name, value);
     }
 

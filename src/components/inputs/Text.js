@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Input from '../Input';
 
-export default class Text extends React.Component {
+export default class Text extends Component {
 
     static propTypes = {
         name: PropTypes.string.isRequired,

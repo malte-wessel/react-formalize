@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Input from '../Input';
 
 function radio(name, selectedValue, onChange) {
-    return class Radio extends React.Component {
+    return class Radio extends Component {
         render() {
             return (
                 <input
@@ -16,7 +16,7 @@ function radio(name, selectedValue, onChange) {
     };
 }
 
-export default class RadioGroup extends React.Component {
+export default class RadioGroup extends Component {
 
     static propTypes = {
         name: PropTypes.string.isRequired

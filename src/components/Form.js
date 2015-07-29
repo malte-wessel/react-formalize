@@ -94,9 +94,11 @@ export default class Form extends React.Component {
         const { onChange } = this.props;
         if (onChange) onChange(data);
 
-        this.setState({ data }, () => {
-            this.listeners.forEach(listener => listener());
-        });
+        this.setState({ data }, this.notify);
+    }
+
+    notify() {
+        this.listeners.forEach(listener => listener());
     }
 
     render() {
