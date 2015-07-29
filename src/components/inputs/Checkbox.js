@@ -7,10 +7,10 @@ export default class Checkbox extends Component {
         name: PropTypes.string.isRequired
     }
 
-    serialize(e) {
+    serialize(event) {
         // target is undefined in react@0.14.0-beta1
         // see https://github.com/facebook/react/issues/4288
-        const target = e.target || e.currentTarget;
+        const target = event.target || event.currentTarget;
         const { checked } = target;
         return checked;
     }
