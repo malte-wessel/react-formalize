@@ -2,26 +2,16 @@ import React from 'react';
 import { findDOMNode, unmountComponentAtNode } from 'react-dom';
 import {
     renderIntoDocument,
-    findRenderedComponentWithType
+    findRenderedComponentWithType,
+    findRenderedDOMComponentWithTag,
+    Simulate
 } from 'react/lib/ReactTestUtils';
 
 import Form from '../../src/components/Form';
 import Input from '../../src/components/Input';
 
 describe('Input', () => {
-    it('should register', () => {
-        const tree = renderIntoDocument(
-            <Form>
-                <Input name="foo" value="bar">{props => <div {...props}/>}</Input>
-            </Form>
-        );
-
-        const form = findRenderedComponentWithType(tree, Form);
-        expect(form.inputs).toEqual({ foo: 'bar' });
-        expect(form.state.data).toEqual({ foo: 'bar' });
-    });
-
-    it('should register', () => {
+    it('should register on mount', () => {
         const tree = renderIntoDocument(
             <Form>
                 <Input name="foo" value="bar">{props => <div {...props}/>}</Input>
@@ -43,5 +33,44 @@ describe('Input', () => {
         const form = findRenderedComponentWithType(tree, Form);
         unmountComponentAtNode(findDOMNode(tree).parentNode);
         expect(form.inputs.foo).toBeA('undefined');
+        expect(form.listeners.length).toEqual(0);
+    });
+
+    it('should pass onChange, value and rest props to children', () => {
+        const data = { foo: 'bar' };
+
+        let propsResult;
+        function children(props) {
+            propsResult = props;
+            return <div/>;
+        }
+
+        renderIntoDocument(
+            <Form data={data}>
+                <Input name="foo" baz="qux">{children}</Input>
+            </Form>
+        );
+        expect(propsResult.value).toEqual('bar');
+        expect(propsResult.onChange).toBeA('function');
+        expect(propsResult.baz).toEqual('qux');
+    });
+
+    it('should propagate changes', () => {
+        const tree = renderIntoDocument(
+            <Form>
+                <Input name="foo">
+                    {props => <input {...props}/>}
+                </Input>
+            </Form>
+        );
+
+        const domInput = findDOMNode(findRenderedDOMComponentWithTag(tree, 'input'));
+        Simulate.change(domInput, {target: {value: 'bar'}});
+
+        const input = findRenderedComponentWithType(tree, Input);
+        const form = findRenderedComponentWithType(tree, Form);
+
+        expect(input.state.value).toEqual('bar');
+        expect(form.state.data).toEqual({ foo: 'bar' });
     });
 });
