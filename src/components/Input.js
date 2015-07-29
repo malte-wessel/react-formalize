@@ -12,7 +12,7 @@ export default class Input extends React.Component {
             React.PropTypes.object,
             React.PropTypes.string
        ]),
-       serialize: PropTypes.func.isRequired,
+       serialize: PropTypes.func,
        children: PropTypes.func
     };
 
@@ -43,8 +43,9 @@ export default class Input extends React.Component {
     }
 
     handleChange(...args) {
-        const { name, serialize } = this.props;
+        const { name } = this.props;
         const { setValue } = this.context;
+        const serialize = this.props.serialize || this.serialize;
         const value = serialize(...args);
         setValue(name, value);
     }
@@ -54,6 +55,14 @@ export default class Input extends React.Component {
         const { getValue } = this.context;
         const state = { value: getValue(name) || value };
         this.setState(state);
+    }
+
+    serialize(e) {
+        // target is undefined in react@0.14.0-beta1
+        // see https://github.com/facebook/react/issues/4288
+        const target = e.target || e.currentTarget;
+        const { value } = target;
+        return value;
     }
 
     render() {
