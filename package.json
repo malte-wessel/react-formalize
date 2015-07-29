@@ -9,7 +9,7 @@
     "build:umd": "webpack src/index.js dist/react-formalize.js && NODE_ENV=production webpack src/index.js dist/react-formalize.min.js",
     "lint": "eslint src test examples",
     "test": "NODE_ENV=test karma start",
-    "test:watch": "NODE_ENV=test karma start --no-single-run",
+    "test:watch": "NODE_ENV=test karma start --no-single-run --auto-watch",
     "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd"
   },
   "repository": {
