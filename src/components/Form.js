@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import update from 'react-addons-update';
-import { set as setPath, get as getPath, has as hasPath } from 'object-path';
+import { set as setPath, get as getPath } from 'object-path';
 import merge from 'deepmerge';
 import invariant from 'invariant';
 
@@ -49,6 +49,22 @@ export default class Form extends React.Component {
 
     componentDidMount() {
         // Now all inputs are registered
+        this.collectData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.collectData(nextProps);
+    }
+
+    handleSubmit(event) {
+        const { onSubmit } = this.props;
+        if (onSubmit) {
+            event.preventDefault();
+            onSubmit(this.state.data);
+        }
+    }
+
+    collectData(props = this.props) {
         const { inputs } = this;
         const inputData = {};
 
@@ -61,17 +77,9 @@ export default class Form extends React.Component {
         }
 
         // Merge with current state
-        const data = merge(inputData, this.state.data);
+        const data = merge(inputData, props.data);
 
         this.setState({ data });
-    }
-
-    handleSubmit(event) {
-        const { onSubmit } = this.props;
-        if (onSubmit) {
-            event.preventDefault();
-            onSubmit(this.state.data);
-        }
     }
 
     register(name, initialValue, listener) {
@@ -110,6 +118,7 @@ export default class Form extends React.Component {
     }
 
     render() {
+        console.log('Form.render');
         const { onChange, onSubmit, ...props } = this.props;
         return (
             <form

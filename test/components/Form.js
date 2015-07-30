@@ -90,4 +90,50 @@ describe('Form', () => {
             bar: 'foo'
         });
     });
+
+    it('should not mutate the state when a value changes', () => {
+        const tree = renderIntoDocument(
+            <Form>
+                <Text name="boo" value="bar"/>
+                <Text name="qux.boo" value="bar"/>
+                <Text name="qux.qoo"/>
+            </Form>
+        );
+
+        const form = findRenderedComponentWithType(tree, Form);
+        const inputs = scryRenderedComponentsWithType(tree, Text);
+        const input = findDOMNode(inputs[0]);
+
+        const before = form.state.data;
+        Simulate.change(input, {target: {value: 'baz'}});
+        const after = form.state.data;
+
+        expect(before === after).toBe(false);
+        expect(before.qux === after.qux).toBe(true);
+    });
+
+    it('should propagate changes, when data property changes', (done) => {
+        class Root extends Component {
+            constructor(props, context) {
+                super(props, context);
+                this.state = {};
+            }
+            render() {
+                return (
+                    <Form data={this.state}>
+                        <Text name="foo" value="bar"/>
+                    </Form>
+                );
+            }
+        }
+
+        const tree = renderIntoDocument(<Root/>);
+        const root = findRenderedComponentWithType(tree, Root);
+        const form = findRenderedComponentWithType(tree, Form);
+
+        root.setState({ foo: 'baz'}, () => {
+            expect(form.state.data).toEqual({ foo: 'baz' });
+            done();
+        });
+    });
 });
