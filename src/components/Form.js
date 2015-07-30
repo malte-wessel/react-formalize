@@ -118,7 +118,6 @@ export default class Form extends React.Component {
     }
 
     render() {
-        console.log('Form.render');
         const { onChange, onSubmit, ...props } = this.props;
         return (
             <form
