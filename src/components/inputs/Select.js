@@ -10,9 +10,7 @@ export default class Select extends Component {
     }
 
     serialize(event) {
-        // target is undefined in react@0.14.0-beta1
-        // see https://github.com/facebook/react/issues/4288
-        const target = event.target || event.currentTarget;
+        const target = event.target;
         const { value, type } = target;
 
         if (type === 'select-multiple') {

@@ -9,7 +9,7 @@ export default class Checkbox extends Component {
     }
 
     serialize(event) {
-        const target = event.target || event.currentTarget;
+        const target = event.target;
         const { checked } = target;
         return checked;
     }

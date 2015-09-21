@@ -3,7 +3,7 @@ import formShape from '../utils/formShape';
 import shallowEqual from '../utils/shallowEqual';
 
 function defaultSerialize(event) {
-    const target = event.target || event.currentTarget;
+    const target = event.target;
     const { value } = target;
     return value;
 }
