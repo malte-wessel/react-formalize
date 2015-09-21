@@ -20,7 +20,7 @@ describe('Input', () => {
 
         const form = findRenderedComponentWithType(tree, Form);
         expect(form.inputs).toEqual({ foo: 'bar' });
-        expect(form.state.data).toEqual({ foo: 'bar' });
+        expect(form.state.values).toEqual({ foo: 'bar' });
     });
 
     it('should unregister on unmount', () => {
@@ -37,7 +37,7 @@ describe('Input', () => {
     });
 
     it('should pass onChange, value and rest props to children', () => {
-        const data = { foo: 'bar' };
+        const values = { foo: 'bar' };
 
         let propsResult;
         function children(props) {
@@ -46,7 +46,7 @@ describe('Input', () => {
         }
 
         renderIntoDocument(
-            <Form data={data}>
+            <Form values={values}>
                 <Input name="foo" baz="qux">{children}</Input>
             </Form>
         );
@@ -71,6 +71,6 @@ describe('Input', () => {
         const form = findRenderedComponentWithType(tree, Form);
 
         expect(input.state.value).toEqual('bar');
-        expect(form.state.data).toEqual({ foo: 'bar' });
+        expect(form.state.values).toEqual({ foo: 'bar' });
     });
 });

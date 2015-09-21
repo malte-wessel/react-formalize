@@ -10,7 +10,12 @@ export default class TextArea extends Component {
     render() {
         return (
             <Input {...this.props}>
-                {props => <textarea {...props}/>}
+                {(props, formProps) => {
+                    const { disabled } = formProps;
+                    return <textarea
+                        disabled={disabled}
+                        {...props}/>;
+                }}
             </Input>
         );
     }

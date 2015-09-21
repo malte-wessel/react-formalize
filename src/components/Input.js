@@ -1,5 +1,12 @@
 import React, { PropTypes } from 'react';
+import formShape from '../utils/formShape';
 import shallowEqual from '../utils/shallowEqual';
+
+function defaultSerialize(event) {
+    const target = event.target || event.currentTarget;
+    const { value } = target;
+    return value;
+}
 
 export default class Input extends React.Component {
 
@@ -17,20 +24,22 @@ export default class Input extends React.Component {
     };
 
     static defaultProps = {
-        value: null
+        value: null,
+        serialize: defaultSerialize
     }
 
     static contextTypes = {
-        register: PropTypes.func,
-        getValue: PropTypes.func,
-        setValue: PropTypes.func
+        form: formShape
     };
 
     constructor(props, context) {
         super(props, context);
-        const { register, getValue } = context;
+        const { form } = context;
+        const { register, subscribe, getValue } = form;
         const { name, value } = props;
-        this.unregister = register(name, value, this.handleFormDataChange.bind(this));
+        this.handleFormDataChange = this.handleFormDataChange.bind(this);
+        this.unregister = register(name, value);
+        this.unsubscribe = subscribe(this.handleFormDataChange);
         this.state = { value: getValue(name) || value };
     }
 
@@ -40,36 +49,34 @@ export default class Input extends React.Component {
 
     componentWillUnmount() {
         this.unregister();
+        this.unsubscribe();
     }
 
     handleChange(...args) {
-        const { name } = this.props;
-        const { setValue } = this.context;
-        const serialize = this.props.serialize || this.serialize;
+        const { name, serialize } = this.props;
+        const { form } = this.context;
+        const { setValue } = form;
         const value = serialize(...args);
         setValue(name, value);
     }
 
     handleFormDataChange() {
-        const { value, name } = this.props;
-        const { getValue } = this.context;
-        const state = { value: getValue(name) || value };
-        this.setState(state);
-    }
-
-    serialize(event) {
-        // target is undefined in react@0.14.0-beta1
-        // see https://github.com/facebook/react/issues/4288
-        const target = event.target || event.currentTarget;
-        const { value } = target;
-        return value;
+        const { name } = this.props;
+        const { value } = this.state;
+        const { form } = this.context;
+        const { getValue } = form;
+        const nextValue = getValue(name);
+        if (nextValue === value) return;
+        this.setState({ value: nextValue });
     }
 
     render() {
-        const { name, children, ...props } = this.props;
+        const { children, ...props } = this.props;
         const { value } = this.state;
+        const { form } = this.context;
+        const { getFormProps } = form;
         const onChange = this.handleChange.bind(this);
-
-        return children({ ...props, value, onChange });
+        const formProps = getFormProps();
+        return children({ ...props, value, onChange }, formProps);
     }
 }

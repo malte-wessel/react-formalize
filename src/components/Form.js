@@ -4,36 +4,33 @@ import { set as setPath, get as getPath } from 'object-path';
 import merge from 'deepmerge';
 import invariant from 'invariant';
 
+import formShape from '../utils/formShape';
 import makePath from '../utils/makePath';
 
 export default class Form extends React.Component {
 
     static propTypes = {
-        children: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.element,
-            PropTypes.arrayOf(PropTypes.element)
-        ]),
-        data: PropTypes.object,
+        children: PropTypes.node,
+        values: PropTypes.object,
+        messages: PropTypes.object,
         onSubmit: PropTypes.func,
         onChange: PropTypes.func
     };
 
     static defaultProps = {
-        data: {}
+        values: {},
+        messages: {}
     }
 
     static childContextTypes = {
-        register: PropTypes.func,
-        getValue: PropTypes.func,
-        setValue: PropTypes.func
+        form: formShape
     };
 
     constructor(props, context) {
         super(props, context);
         // set initial state
-        const { data } = this.props;
-        this.state = { data };
+        const { values, messages } = props;
+        this.state = { values, messages };
 
         this.inputs = {};
         this.listeners = [];
@@ -41,30 +38,35 @@ export default class Form extends React.Component {
 
     getChildContext() {
         return {
-            register: this.register.bind(this),
-            getValue: this.getValue.bind(this),
-            setValue: this.setValue.bind(this)
+            form: {
+                register: this.register.bind(this),
+                subscribe: this.subscribe.bind(this),
+                getValue: this.getValue.bind(this),
+                setValue: this.setValue.bind(this),
+                getMessage: this.getMessage.bind(this),
+                getFormProps: this.getFormProps.bind(this)
+            }
         };
     }
 
     componentDidMount() {
         // Now all inputs are registered
-        this.collectData();
+        this.collectValues();
     }
 
     componentWillReceiveProps(nextProps) {
-        this.collectData(nextProps);
+        this.collectValues(nextProps);
     }
 
     handleSubmit(event) {
         const { onSubmit } = this.props;
         if (onSubmit) {
             event.preventDefault();
-            onSubmit(this.state.data);
+            onSubmit(this.state.values);
         }
     }
 
-    collectData(props = this.props) {
+    collectValues(props = this.props) {
         const { inputs } = this;
         const inputData = {};
 
@@ -77,12 +79,12 @@ export default class Form extends React.Component {
         }
 
         // Merge with current state
-        const data = merge(inputData, props.data);
+        const values = merge(inputData, props.values);
 
-        this.setState({ data });
+        this.setState({ values });
     }
 
-    register(name, initialValue, listener) {
+    register(name, initialValue) {
         invariant(
             this.inputs[name] === undefined,
             'Naming conflict: there is already an input field with name `%s`',
@@ -90,27 +92,42 @@ export default class Form extends React.Component {
         );
 
         this.inputs[name] = initialValue;
-        this.listeners.push(listener);
         return () => {
             this.inputs[name] = undefined;
+        };
+    }
+
+    subscribe(listener) {
+        this.listeners.push(listener);
+        return () => {
             const index = this.listeners.indexOf(listener);
             this.listeners.splice(index, 1);
         };
     }
 
     getValue(key) {
-        const { data } = this.state;
-        return getPath(data, key);
+        const { values } = this.state;
+        return getPath(values, key);
     }
 
     setValue(key, value) {
         const mutation = makePath(key + '.$set', value);
-        const data = update(this.state.data, mutation);
+        const values = update(this.state.values, mutation);
 
         const { onChange } = this.props;
-        if (onChange) onChange(data);
+        if (onChange) onChange(values);
 
-        this.setState({ data }, this.notify);
+        this.setState({ values }, this.notify);
+    }
+
+    getMessage(key) {
+        const { messages } = this.state;
+        return getPath(messages, key);
+    }
+
+    getFormProps() {
+        const { children, ...props } = this.props;
+        return props;
     }
 
     notify() {

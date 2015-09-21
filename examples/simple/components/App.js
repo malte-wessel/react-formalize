@@ -7,25 +7,25 @@ import {
     RadioGroup,
     Select } from 'react-formalize';
 
-const mock = {
+const defaultValues = {
     title: 'Hello World'
 };
 
 export default class App extends Component {
 
-    handleChange(data) {
-        console.info('Change', data);
+    handleChange(values) {
+        console.info('Change', values);
     }
 
-    handleSubmit(data) {
-        console.info('Submit', data);
+    handleSubmit(values) {
+        console.info('Submit', values);
     }
 
     render() {
         return (
             <div>
                 <h1>Simple example</h1>
-                <Form data={mock} onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                <Form values={defaultValues} onSubmit={this.handleSubmit} onChange={this.handleChange}>
                     <div>
                         <label>Title</label>
                         <Text name="title"/>

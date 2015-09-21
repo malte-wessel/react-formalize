@@ -11,12 +11,10 @@ import Form from '../../src/components/Form';
 import Text from '../../src/components/inputs/Text';
 
 describe('Form', () => {
-    it('should add register, getState and setState to the child context', () => {
+    it('should add form to child context', () => {
         class Child extends Component {
             static contextTypes = {
-                register: PropTypes.func,
-                getValue: PropTypes.func,
-                setValue: PropTypes.func
+                form: PropTypes.any
             };
 
             render() {
@@ -33,27 +31,27 @@ describe('Form', () => {
         );
 
         const child = findRenderedComponentWithType(tree, Child);
-        expect(child.context.register).toBeA('function');
-        expect(child.context.getValue).toBeA('function');
-        expect(child.context.setValue).toBeA('function');
+        expect(child.context.form).toBeA('object');
+        expect(child.context.form.getValue).toBeA('function');
+        expect(child.context.form.setValue).toBeA('function');
     });
 
-    it('should add the passed data to its state', () => {
-        const data = { foo: 'bar' };
+    it('should add the passed values to its state', () => {
+        const values = { foo: 'bar' };
 
         const tree = renderIntoDocument(
-            <Form data={data}/>
+            <Form values={values}/>
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.data).toEqual(data);
+        expect(form.state.values).toEqual(values);
     });
 
-    it('should merge data from its input child components', () => {
-        const data = { foo: 'faz', boo: 'baz' };
+    it('should merge values from its input child components', () => {
+        const values = { foo: 'faz', boo: 'baz' };
 
         const tree = renderIntoDocument(
-            <Form data={data}>
+            <Form values={values}>
                 <Text name="boo" value="bar"/>
                 <Text name="qux.boo" value="bar"/>
                 <Text name="qux.qoo"/>
@@ -61,7 +59,7 @@ describe('Form', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.data).toEqual({
+        expect(form.state.values).toEqual({
             foo: 'faz',
             boo: 'baz',
             qux: {
@@ -73,7 +71,7 @@ describe('Form', () => {
 
     it('should call `onChange` when a value changes', () => {
         let onChangeResult;
-        function onChange(data) { onChangeResult = data; }
+        function onChange(values) { onChangeResult = values; }
 
         const tree = renderIntoDocument(
             <Form onChange={onChange}>
@@ -104,15 +102,15 @@ describe('Form', () => {
         const inputs = scryRenderedComponentsWithType(tree, Text);
         const input = findDOMNode(inputs[0]);
 
-        const before = form.state.data;
+        const before = form.state.values;
         Simulate.change(input, {target: {value: 'baz'}});
-        const after = form.state.data;
+        const after = form.state.values;
 
         expect(before === after).toBe(false);
         expect(before.qux === after.qux).toBe(true);
     });
 
-    it('should propagate changes, when data property changes', (done) => {
+    it('should propagate changes, when values property changes', (done) => {
         class Root extends Component {
             constructor(props, context) {
                 super(props, context);
@@ -120,7 +118,7 @@ describe('Form', () => {
             }
             render() {
                 return (
-                    <Form data={this.state}>
+                    <Form values={this.state}>
                         <Text name="foo" value="bar"/>
                     </Form>
                 );
@@ -132,7 +130,7 @@ describe('Form', () => {
         const form = findRenderedComponentWithType(tree, Form);
 
         root.setState({ foo: 'baz'}, () => {
-            expect(form.state.data).toEqual({ foo: 'baz' });
+            expect(form.state.values).toEqual({ foo: 'baz' });
             done();
         });
     });

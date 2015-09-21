@@ -29,7 +29,12 @@ export default class Text extends Component {
     render() {
         return (
             <Input {...this.props}>
-                {props => <input {...props}/>}
+                {(props, formProps) => {
+                    const { disabled } = formProps;
+                    return <input
+                        disabled={disabled}
+                        {...props}/>;
+                }}
             </Input>
         );
     }

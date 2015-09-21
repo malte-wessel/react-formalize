@@ -4,23 +4,28 @@ import Input from '../Input';
 export default class Checkbox extends Component {
 
     static propTypes = {
-        name: PropTypes.string.isRequired
+        name: PropTypes.string.isRequired,
+        checked: PropTypes.bool
     }
 
     serialize(event) {
-        // target is undefined in react@0.14.0-beta1
-        // see https://github.com/facebook/react/issues/4288
         const target = event.target || event.currentTarget;
         const { checked } = target;
         return checked;
     }
 
     render() {
+        const { checked, ...props } = this.props;
         return (
-            <Input serialize={this.serialize} value={false} {...this.props}>
-                {({value, ...props}) => {
-                    const checked = !!value;
-                    return <input type="checkbox" value={true} checked={checked} {...props}/>;
+            <Input serialize={this.serialize} value={!!checked} {...props}>
+                {({value, ...innerProps}, formProps) => {
+                    const { disabled } = formProps;
+                    return <input
+                        type="checkbox"
+                        value={true}
+                        checked={value}
+                        disabled={disabled}
+                        {...innerProps}/>;
                 }}
             </Input>
         );
