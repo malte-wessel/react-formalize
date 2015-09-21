@@ -113,7 +113,7 @@ export default class Form extends React.Component {
 
     getValue(key) {
         const { values } = this.state;
-        return getPath(values, key);
+        return getPath(values, key) || values[key];
     }
 
     setValue(key, value) {
@@ -128,7 +128,7 @@ export default class Form extends React.Component {
 
     getMessage(key) {
         const { messages } = this.props;
-        return getPath(messages, key);
+        return getPath(messages, key) || messages[key];
     }
 
     getFormProps() {

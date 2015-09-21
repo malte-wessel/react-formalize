@@ -25,6 +25,38 @@ describe('Message', () => {
         expect($message.childNodes[0].nodeValue).toEqual('bar');
     });
 
+    it('should display nested messages', () => {
+        const messages = {
+            foo: {
+                boo: 'bar'
+            }
+        };
+        const tree = renderIntoDocument(
+            <Form messages={messages}>
+                <Message name="foo.boo"/>
+            </Form>
+        );
+
+        const message = findRenderedComponentWithType(tree, Message);
+        const $message = findDOMNode(message);
+        expect($message.childNodes[0].nodeValue).toEqual('bar');
+    });
+
+    it('should display nested messages (path keys)', () => {
+        const messages = {
+            'foo.boo': 'bar'
+        };
+        const tree = renderIntoDocument(
+            <Form messages={messages}>
+                <Message name="foo.boo"/>
+            </Form>
+        );
+
+        const message = findRenderedComponentWithType(tree, Message);
+        const $message = findDOMNode(message);
+        expect($message.childNodes[0].nodeValue).toEqual('bar');
+    });
+
     it('should take a custom render function', () => {
         const messages = {
             foo: 'bar'
