@@ -10,7 +10,10 @@ import makePath from '../utils/makePath';
 export default class Form extends React.Component {
 
     static propTypes = {
-        children: PropTypes.node,
+        children: PropTypes.oneOfType([
+            PropTypes.node,
+            PropTypes.func
+        ]),
         values: PropTypes.object,
         messages: PropTypes.object,
         onSubmit: PropTypes.func,
@@ -29,9 +32,8 @@ export default class Form extends React.Component {
     constructor(props, context) {
         super(props, context);
         // set initial state
-        const { values, messages } = props;
-        this.state = { values, messages };
-
+        const { values } = props;
+        this.state = { values };
         this.inputs = {};
         this.listeners = [];
     }
@@ -56,6 +58,10 @@ export default class Form extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.collectValues(nextProps);
+    }
+
+    componentDidUpdate() {
+        this.notify();
     }
 
     handleSubmit(event) {
@@ -121,7 +127,7 @@ export default class Form extends React.Component {
     }
 
     getMessage(key) {
-        const { messages } = this.state;
+        const { messages } = this.props;
         return getPath(messages, key);
     }
 
@@ -135,12 +141,16 @@ export default class Form extends React.Component {
     }
 
     render() {
-        const { onChange, onSubmit, ...props } = this.props;
+        const { values } = this.state;
+        const { onChange, onSubmit, messages, children, ...props } = this.props;
         return (
             <form
                 {...props}
                 onSubmit={this.handleSubmit.bind(this)}>
-                {this.props.children}
+                {typeof children === 'function'
+                    ? children(messages, values)
+                    : children
+                }
             </form>
         );
     }

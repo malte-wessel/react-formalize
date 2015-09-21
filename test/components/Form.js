@@ -134,4 +134,20 @@ describe('Form', () => {
             done();
         });
     });
+
+    it('should support children as function', () => {
+        const values = {
+            foo: 'bar'
+        };
+        const tree = renderIntoDocument(
+            <Form values={values}>{() =>
+                <Text name="foo"/>
+            }
+            </Form>
+        );
+
+        const input = findRenderedComponentWithType(tree, Text);
+        const $input = findDOMNode(input);
+        expect($input.value).toEqual('bar');
+    });
 });
