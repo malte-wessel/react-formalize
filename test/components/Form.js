@@ -44,7 +44,7 @@ describe('Form', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.values).toEqual(values);
+        expect(form.values).toEqual(values);
     });
 
     it('should merge values from its input child components', () => {
@@ -59,7 +59,7 @@ describe('Form', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.values).toEqual({
+        expect(form.values).toEqual({
             foo: 'faz',
             boo: 'baz',
             qux: {
@@ -102,9 +102,9 @@ describe('Form', () => {
         const inputs = scryRenderedComponentsWithType(tree, Text);
         const input = findDOMNode(inputs[0]);
 
-        const before = form.state.values;
+        const before = form.values;
         Simulate.change(input, {target: {value: 'baz'}});
-        const after = form.state.values;
+        const after = form.values;
 
         expect(before === after).toBe(false);
         expect(before.qux === after.qux).toBe(true);
@@ -130,7 +130,7 @@ describe('Form', () => {
         const form = findRenderedComponentWithType(tree, Form);
 
         root.setState({ foo: 'baz'}, () => {
-            expect(form.state.values).toEqual({ foo: 'baz' });
+            expect(form.values).toEqual({ foo: 'baz' });
             done();
         });
     });
@@ -149,5 +149,43 @@ describe('Form', () => {
         const input = findRenderedComponentWithType(tree, Text);
         const $input = findDOMNode(input);
         expect($input.value).toEqual('bar');
+    });
+
+    it('should reset registered inputs on rerendering', done => {
+        class Root extends Component {
+            constructor(props, context) {
+                super(props, context);
+                this.state = {};
+            }
+            render() {
+                const { odd } = this.state;
+
+                const values = odd
+                    ? { foo: 'bar' }
+                    : { qux: 'fax' };
+
+                return (
+                    <Form values={values}>
+                        {odd ?
+                            <Text name="foo" value="bar2"/> :
+                            <Text name="qux" value="fax2"/>
+                        }
+                    </Form>
+                );
+            }
+        }
+
+        const tree = renderIntoDocument(<Root/>);
+        const root = findRenderedComponentWithType(tree, Root);
+        const form = findRenderedComponentWithType(tree, Form);
+
+        expect(form.values).toEqual({ qux: 'fax' });
+        expect(form.inputs).toEqual({ qux: 'fax2' });
+
+        root.setState({ odd: true}, () => {
+            expect(form.values).toEqual({ foo: 'bar' });
+            expect(form.inputs).toEqual({ foo: 'bar2' });
+            done();
+        });
     });
 });

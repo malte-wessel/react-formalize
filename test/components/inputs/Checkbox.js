@@ -31,7 +31,7 @@ describe('Checkbox', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.values).toEqual({ foo: true });
+        expect(form.values).toEqual({ foo: true });
     });
     it('should be disabled if form is', () => {
         const tree = renderIntoDocument(

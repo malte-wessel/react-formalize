@@ -79,7 +79,7 @@ describe('Select', () => {
             );
 
             const form = findRenderedComponentWithType(tree, Form);
-            expect(form.state.values).toEqual({ foo: 'bux' });
+            expect(form.values).toEqual({ foo: 'bux' });
         });
     });
 
@@ -159,7 +159,7 @@ describe('Select', () => {
             );
 
             const form = findRenderedComponentWithType(tree, Form);
-            expect(form.state.values).toEqual({ foo: ['bux', 'qux'] });
+            expect(form.values).toEqual({ foo: ['bux', 'qux'] });
         });
     });
 

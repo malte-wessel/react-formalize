@@ -33,7 +33,7 @@ export default class Form extends React.Component {
         super(props, context);
         // set initial state
         const { values } = props;
-        this.state = { values };
+        this.values = { ...values };
         this.inputs = {};
         this.listeners = [];
     }
@@ -61,14 +61,14 @@ export default class Form extends React.Component {
     }
 
     componentDidUpdate() {
-        this.notify();
+        this.collectValues();
     }
 
     handleSubmit(event) {
         const { onSubmit } = this.props;
         if (onSubmit) {
             event.preventDefault();
-            onSubmit(this.state.values);
+            onSubmit(this.values);
         }
     }
 
@@ -87,7 +87,8 @@ export default class Form extends React.Component {
         // Merge with current state
         const values = merge(inputData, props.values);
 
-        this.setState({ values });
+        this.values = values;
+        this.notify();
     }
 
     register(name, initialValue) {
@@ -99,7 +100,13 @@ export default class Form extends React.Component {
 
         this.inputs[name] = initialValue;
         return () => {
-            this.inputs[name] = undefined;
+            const inputs = {};
+            for (let key in this.inputs) {
+                if (!this.inputs.hasOwnProperty(key)) continue;
+                if (key === name) continue;
+                inputs[key] = this.inputs[key];
+            }
+            this.inputs = inputs;
         };
     }
 
@@ -112,18 +119,19 @@ export default class Form extends React.Component {
     }
 
     getValue(key) {
-        const { values } = this.state;
+        const values = this.values;
         return getPath(values, key) || values[key];
     }
 
     setValue(key, value) {
         const mutation = makePath(key + '.$set', value);
-        const values = update(this.state.values, mutation);
+        const values = update(this.values, mutation);
 
         const { onChange } = this.props;
         if (onChange) onChange(values);
 
-        this.setState({ values }, this.notify);
+        this.values = values;
+        this.notify();
     }
 
     getMessage(key) {
@@ -141,7 +149,7 @@ export default class Form extends React.Component {
     }
 
     render() {
-        const { values } = this.state;
+        const values = this.values;
         const { onChange, onSubmit, messages, children, ...props } = this.props;
         return (
             <form

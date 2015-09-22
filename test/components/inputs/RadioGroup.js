@@ -78,7 +78,7 @@ describe('RadioGroup', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.values).toEqual({ foo: 'bux' });
+        expect(form.values).toEqual({ foo: 'bux' });
     });
     it('should be disabled if form is', () => {
         const options = {

@@ -32,7 +32,12 @@ export default class App extends Component {
         return undefined;
     }
 
+    onChange(post) {
+        console.info('onChange', post);
+    }
+
     onSubmit(post) {
+        console.info('onSubmit', post);
         const messages = this.validate(post);
         let saving = false;
         if (!messages) {
@@ -64,6 +69,7 @@ export default class App extends Component {
                         </div>
                         <Form
                             onSubmit={this.onSubmit.bind(this)}
+                            onChange={this.onChange.bind(this)}
                             values={post}
                             messages={messages}
                             disabled={saving}>

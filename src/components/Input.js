@@ -43,6 +43,14 @@ export default class Input extends React.Component {
         this.state = { value: getValue(name) || value };
     }
 
+    componentWillUpdate(nextProps) {
+        const { form } = this.context;
+        const { register } = form;
+        const { name, value } = nextProps;
+        this.unregister();
+        this.unregister = register(name, value);
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
     }

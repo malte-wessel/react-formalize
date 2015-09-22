@@ -20,7 +20,7 @@ describe('Input', () => {
 
         const form = findRenderedComponentWithType(tree, Form);
         expect(form.inputs).toEqual({ foo: 'bar' });
-        expect(form.state.values).toEqual({ foo: 'bar' });
+        expect(form.values).toEqual({ foo: 'bar' });
     });
 
     it('should unregister on unmount', () => {
@@ -71,6 +71,6 @@ describe('Input', () => {
         const form = findRenderedComponentWithType(tree, Form);
 
         expect(input.state.value).toEqual('bar');
-        expect(form.state.values).toEqual({ foo: 'bar' });
+        expect(form.values).toEqual({ foo: 'bar' });
     });
 });

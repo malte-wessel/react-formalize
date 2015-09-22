@@ -31,7 +31,7 @@ describe('TextArea', () => {
         );
 
         const form = findRenderedComponentWithType(tree, Form);
-        expect(form.state.values).toEqual({ foo: 'bar' });
+        expect(form.values).toEqual({ foo: 'bar' });
     });
     it('should be disabled if form is', () => {
         const tree = renderIntoDocument(
