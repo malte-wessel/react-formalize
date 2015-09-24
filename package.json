@@ -1,6 +1,6 @@
 {
   "name": "react-formalize",
-  "version": "0.3.0-alpha",
+  "version": "0.3.0-alpha2",
   "description": "Serialize react forms",
   "main": "lib/index.js",
   "scripts": {
