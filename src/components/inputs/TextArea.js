@@ -7,15 +7,19 @@ export default class TextArea extends Component {
         name: PropTypes.string.isRequired
     }
 
+    constructor(props, context) {
+        super(props, context);
+        this.renderInput = this.renderInput.bind(this);
+    }
+
+    renderInput(props) {
+        return <textarea {...props}/>;
+    }
+
     render() {
         return (
             <Input {...this.props}>
-                {(props, formProps) => {
-                    const { disabled } = formProps;
-                    return <textarea
-                        disabled={disabled}
-                        {...props}/>;
-                }}
+                {this.renderInput}
             </Input>
         );
     }

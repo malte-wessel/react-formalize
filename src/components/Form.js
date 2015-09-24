@@ -17,12 +17,14 @@ export default class Form extends React.Component {
         values: PropTypes.object,
         messages: PropTypes.object,
         onSubmit: PropTypes.func,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        disabled: PropTypes.bool
     };
 
     static defaultProps = {
         values: {},
-        messages: {}
+        messages: {},
+        disabled: false
     }
 
     static childContextTypes = {

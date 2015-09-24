@@ -37,13 +37,19 @@ export default class Input extends React.Component {
         const { form } = context;
         const { register, subscribe, getValue } = form;
         const { name, value } = props;
+
         this.handleFormDataChange = this.handleFormDataChange.bind(this);
         this.unregister = register(name, value);
         this.unsubscribe = subscribe(this.handleFormDataChange);
-        this.state = { value: getValue(name) || value };
+
+        this.state = {
+            value: getValue(name) || value,
+            disabled: false
+        };
     }
 
     componentWillUpdate(nextProps) {
+        if (shallowEqual(this.props, nextProps)) return;
         const { form } = this.context;
         const { register } = form;
         const { name, value } = nextProps;
@@ -70,21 +76,17 @@ export default class Input extends React.Component {
 
     handleFormDataChange() {
         const { name } = this.props;
-        const { value } = this.state;
         const { form } = this.context;
-        const { getValue } = form;
-        const nextValue = getValue(name);
-        if (nextValue === value) return;
-        this.setState({ value: nextValue });
+        const { getValue, getFormProps } = form;
+        const { disabled } = getFormProps();
+        const value = getValue(name);
+        this.setState({ value, disabled });
     }
 
     render() {
         const { children, ...props } = this.props;
-        const { value } = this.state;
-        const { form } = this.context;
-        const { getFormProps } = form;
+        const { value, disabled } = this.state;
         const onChange = this.handleChange.bind(this);
-        const formProps = getFormProps();
-        return children({ ...props, value, onChange }, formProps);
+        return children({ ...props, value, disabled, onChange });
     }
 }

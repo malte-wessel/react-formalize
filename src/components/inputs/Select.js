@@ -9,6 +9,11 @@ export default class Select extends Component {
         children: PropTypes.node
     }
 
+    constructor(props, context) {
+        super(props, context);
+        this.renderInput = this.renderInput.bind(this);
+    }
+
     serialize(event) {
         const target = event.target;
         const { value, type } = target;
@@ -36,6 +41,17 @@ export default class Select extends Component {
         return children;
     }
 
+    renderInput(props) {
+        const { options, children } = this.props;
+        return (
+            <select {...props}>
+                {options
+                    ? this.renderOptions(options)
+                    : children}
+            </select>
+        );
+    }
+
     render() {
         const {children, options, value, multiple, ...props} = this.props;
         let finalValue = value;
@@ -47,18 +63,7 @@ export default class Select extends Component {
 
         return (
             <Input serialize={this.serialize} value={finalValue} multiple={multiple} {...props}>
-                {(innerProps, formProps) => {
-                    const { disabled } = formProps;
-                    return (
-                        <select
-                            disabled={disabled}
-                            {...innerProps}>
-                            {options
-                                ? this.renderOptions(options)
-                                : children}
-                        </select>
-                    );
-                }}
+                {this.renderInput}
             </Input>
         );
     }

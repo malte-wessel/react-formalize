@@ -26,15 +26,19 @@ export default class Text extends Component {
         type: 'text'
     }
 
+    constructor(props, context) {
+        super(props, context);
+        this.renderInput = this.renderInput.bind(this);
+    }
+
+    renderInput(props) {
+        return <input {...props}/>;
+    }
+
     render() {
         return (
             <Input {...this.props}>
-                {(props, formProps) => {
-                    const { disabled } = formProps;
-                    return <input
-                        disabled={disabled}
-                        {...props}/>;
-                }}
+                {this.renderInput}
             </Input>
         );
     }

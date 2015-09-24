@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import Input from '../Input';
 
-function radio(name, selectedValue, onChange, formProps) {
+function radio(name, selectedValue, disabled, onChange) {
     return class Radio extends Component {
         render() {
-            const { disabled } = formProps;
             return (
                 <input
                     {...this.props}
@@ -24,6 +23,11 @@ export default class RadioGroup extends Component {
         name: PropTypes.string.isRequired,
         children: PropTypes.func,
         options: PropTypes.object
+    }
+
+    constructor(props, context) {
+        super(props, context);
+        this.renderInput = this.renderInput.bind(this);
     }
 
     serialize(value) {
@@ -46,18 +50,21 @@ export default class RadioGroup extends Component {
         return children;
     }
 
+    renderInput(props) {
+        const { children, options } = this.props;
+        const { name, value, disabled, onChange } = props;
+        const Radio = radio(name, value, disabled, onChange);
+        const renderedChildren = options
+            ? <div>{this.renderOptions(Radio, options)}</div>
+            : children(Radio);
+        return renderedChildren;
+    }
+
     render() {
         const {children, options, ...props} = this.props;
-
         return (
             <Input serialize={this.serialize} {...props}>
-                {({name, value, onChange, ...innerProps}, formProps) => {
-                    const Radio = radio(name, value, onChange, formProps);
-                    const renderedChildren = options
-                        ? <div>{this.renderOptions(Radio, options)}</div>
-                        : children(Radio);
-                    return renderedChildren;
-                }}
+                {this.renderInput}
             </Input>
         );
     }
