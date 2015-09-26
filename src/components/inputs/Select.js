@@ -10,12 +10,6 @@ export default class Select extends Component {
         placeholder: PropTypes.string
     }
 
-    static defaultProps = {
-        // Set empty string as default value
-        // This will show up the placeholder option, when no value is set.
-        value: ''
-    }
-
     constructor(props, context) {
         super(props, context);
         this.renderInput = this.renderInput.bind(this);
@@ -38,18 +32,15 @@ export default class Select extends Component {
         return value;
     }
 
-    renderOptions(options, placeholder) {
+    renderOptions(options, multiple, placeholder) {
         const children = [];
 
-        if (placeholder) {
-            // Placeholder implementation from stack overflow
-            // See: http://stackoverflow.com/a/8442831/1818705
+        if (!multiple && placeholder) {
             children.push(
                 <option
                     key="placeholder"
                     value=""
-                    disabled
-                    style={{display: 'none'}}>
+                    disabled>
                     {placeholder}
                 </option>
             );
@@ -70,11 +61,25 @@ export default class Select extends Component {
     }
 
     renderInput(props) {
-        const { options, placeholder, children } = this.props;
+        const {
+            options,
+            multiple,
+            placeholder,
+            children
+        } = this.props;
+
+        const { value, ...restProps } = props;
+        let finalValue = value;
+        if (placeholder && !value) {
+            // Set empty string as default value.
+            // This will show up the placeholder option, when no value is set.
+            finalValue = '';
+        }
+
         return (
-            <select {...props}>
+            <select value={finalValue} {...restProps}>
                 {options
-                    ? this.renderOptions(options, placeholder)
+                    ? this.renderOptions(options, multiple, placeholder)
                     : children}
             </select>
         );
