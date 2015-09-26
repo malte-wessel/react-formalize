@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import {
     renderIntoDocument,
-    findRenderedComponentWithType
+    findRenderedComponentWithType,
+    findRenderedDOMComponentWithTag,
+    scryRenderedDOMComponentsWithTag
 } from 'react/lib/ReactTestUtils';
 
 import Form from '../../../src/components/Form';
@@ -182,5 +184,48 @@ describe('Select', () => {
 
         const input = findRenderedComponentWithType(tree, Select);
         expect(findDOMNode(input).disabled).toEqual(false);
+    });
+    it('should rerender when options change', done => {
+        class Root extends Component {
+            constructor(props, context) {
+                super(props, context);
+                this.state = {};
+            }
+            render() {
+                const { odd } = this.state;
+                const options = odd
+                    ? { foo: 'bar' }
+                    : { qux: 'fax' };
+                return (
+                    <Form>
+                        <Select name="foo" options={options}/>
+                    </Form>
+                );
+            }
+        }
+
+        const tree = renderIntoDocument(<Root/>);
+        const root = findRenderedComponentWithType(tree, Root);
+        const option = findRenderedDOMComponentWithTag(tree, 'option');
+        expect(option.value).toEqual('qux');
+        root.setState({ odd: true}, () => {
+            const option2 = findRenderedDOMComponentWithTag(tree, 'option');
+            expect(option2.value).toEqual('foo');
+            done();
+        });
+    });
+    it('should accept placeholder option', () => {
+        const tree = renderIntoDocument(
+            <Form>
+                <Select
+                    name="foo"
+                    options={{foo: 'bar', qux: 'qax'}}
+                    placeholder="bun"/>
+            </Form>
+        );
+        const options = scryRenderedDOMComponentsWithTag(tree, 'option');
+        expect(options.length).toEqual(3);
+        expect(options[0].value).toEqual('');
+        expect(options[0].disabled).toEqual(true);
     });
 });

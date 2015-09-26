@@ -36,10 +36,7 @@ export default class App extends Component {
                     </div>
                     <div>
                         <label>Category</label>
-                        <Select name="category">
-                            <option value="news">News</option>
-                            <option value="sport">Sport</option>
-                        </Select>
+                        <Select name="category" placeholder="Choose category..." options={{news: 'News', sport: 'Sport'}}/>
                     </div>
                     <div>
                         <label>Category</label>

@@ -6,7 +6,14 @@ export default class Select extends Component {
     static propTypes = {
         name: PropTypes.string.isRequired,
         options: PropTypes.object,
-        children: PropTypes.node
+        children: PropTypes.node,
+        placeholder: PropTypes.string
+    }
+
+    static defaultProps = {
+        // Set empty string as default value
+        // This will show up the placeholder option, when no value is set.
+        value: ''
     }
 
     constructor(props, context) {
@@ -31,29 +38,50 @@ export default class Select extends Component {
         return value;
     }
 
-    renderOptions(options) {
+    renderOptions(options, placeholder) {
         const children = [];
+
+        if (placeholder) {
+            // Placeholder implementation from stack overflow
+            // See: http://stackoverflow.com/a/8442831/1818705
+            children.push(
+                <option
+                    key="placeholder"
+                    value=""
+                    disabled
+                    style={{display: 'none'}}>
+                    {placeholder}
+                </option>
+            );
+        }
+
         for (let value in options) {
             if (!options.hasOwnProperty(value)) continue;
             const label = options[value];
-            children.push(<option key={value} value={value}>{label}</option>);
+            children.push(
+                <option
+                    key={value}
+                    value={value}>
+                    {label}
+                </option>
+            );
         }
         return children;
     }
 
     renderInput(props) {
-        const { options, children } = this.props;
+        const { options, placeholder, children } = this.props;
         return (
             <select {...props}>
                 {options
-                    ? this.renderOptions(options)
+                    ? this.renderOptions(options, placeholder)
                     : children}
             </select>
         );
     }
 
     render() {
-        const {children, options, value, multiple, ...props} = this.props;
+        const {children, value, multiple, ...props} = this.props;
         let finalValue = value;
 
         if (multiple && !Array.isArray(value)) {
