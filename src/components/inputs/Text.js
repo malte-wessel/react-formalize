@@ -1,9 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import Input from '../Input';
 
-export default class Text extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Text',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         type: PropTypes.oneOf([
             'date',
@@ -20,20 +22,17 @@ export default class Text extends Component {
             'url',
             'week'
         ])
-    }
+    },
 
-    static defaultProps = {
-        type: 'text'
-    }
-
-    constructor(props, context) {
-        super(props, context);
-        this.renderInput = this.renderInput.bind(this);
-    }
+    getDefaultProps() {
+        return {
+            type: 'text'
+        };
+    },
 
     renderInput(props) {
         return <input {...props}/>;
-    }
+    },
 
     render() {
         return (
@@ -42,4 +41,4 @@ export default class Text extends Component {
             </Input>
         );
     }
-}
+});

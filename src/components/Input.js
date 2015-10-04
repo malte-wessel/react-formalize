@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import formShape from '../utils/formShape';
 import shallowEqual from '../utils/shallowEqual';
 
@@ -8,9 +8,11 @@ function defaultSerialize(event) {
     return value;
 }
 
-export default class Input extends React.Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Input',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         value: PropTypes.oneOfType([
             React.PropTypes.array,
@@ -21,32 +23,37 @@ export default class Input extends React.Component {
        ]),
        serialize: PropTypes.func,
        children: PropTypes.func
-    };
+    },
 
-    static defaultProps = {
-        value: null,
-        serialize: defaultSerialize
-    }
-
-    static contextTypes = {
+    contextTypes: {
         form: formShape
-    };
+    },
 
-    constructor(props, context) {
-        super(props, context);
-        const { form } = context;
-        const { register, subscribe, getValue } = form;
-        const { name, value } = props;
+    getDefaultProps() {
+        return {
+            value: null,
+            serialize: defaultSerialize
+        };
+    },
 
-        this.handleFormDataChange = this.handleFormDataChange.bind(this);
-        this.unregister = register(name, value);
-        this.unsubscribe = subscribe(this.handleFormDataChange);
-
-        this.state = {
+    getInitialState() {
+        const { form } = this.context;
+        const { getValue } = form;
+        const { name, value } = this.props;
+        return {
             value: getValue(name) || value,
             disabled: false
         };
-    }
+    },
+
+    componentWillMount() {
+        const { form } = this.context;
+        const { register, subscribe } = form;
+        const { name, value } = this.props;
+
+        this.unregister = register(name, value);
+        this.unsubscribe = subscribe(this.handleFormDataChange);
+    },
 
     componentWillUpdate(nextProps) {
         if (shallowEqual(this.props, nextProps)) return;
@@ -55,16 +62,16 @@ export default class Input extends React.Component {
         const { name, value } = nextProps;
         this.unregister();
         this.unregister = register(name, value);
-    }
+    },
 
     shouldComponentUpdate(nextProps, nextState) {
         return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
-    }
+    },
 
     componentWillUnmount() {
         this.unregister();
         this.unsubscribe();
-    }
+    },
 
     handleChange(...args) {
         const { name, serialize } = this.props;
@@ -72,7 +79,7 @@ export default class Input extends React.Component {
         const { setValue } = form;
         const value = serialize(...args);
         setValue(name, value);
-    }
+    },
 
     handleFormDataChange() {
         const { name } = this.props;
@@ -81,12 +88,12 @@ export default class Input extends React.Component {
         const { disabled } = getFormProps();
         const value = getValue(name);
         this.setState({ value, disabled });
-    }
+    },
 
     render() {
         const { children, ...props } = this.props;
         const { value, disabled } = this.state;
-        const onChange = this.handleChange.bind(this);
+        const onChange = this.handleChange;
         return children({ ...props, value, disabled, onChange });
     }
-}
+});

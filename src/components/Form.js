@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import update from 'react-addons-update';
 import { set as setPath, get as getPath } from 'object-path';
 import merge from 'deepmerge';
@@ -7,9 +7,11 @@ import invariant from 'invariant';
 import formShape from '../utils/formShape';
 import makePath from '../utils/makePath';
 
-export default class Form extends React.Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Form',
+
+    propTypes: {
         children: PropTypes.oneOfType([
             PropTypes.node,
             PropTypes.func
@@ -19,52 +21,52 @@ export default class Form extends React.Component {
         onSubmit: PropTypes.func,
         onChange: PropTypes.func,
         disabled: PropTypes.bool
-    };
+    },
 
-    static defaultProps = {
-        values: {},
-        messages: {},
-        disabled: false
-    }
-
-    static childContextTypes = {
+    childContextTypes: {
         form: formShape
-    };
+    },
 
-    constructor(props, context) {
-        super(props, context);
-        // set initial state
-        const { values } = props;
-        this.values = { ...values };
-        this.inputs = {};
-        this.listeners = [];
-    }
+    getDefaultProps() {
+        return {
+            values: {},
+            messages: {},
+            disabled: false
+        };
+    },
 
     getChildContext() {
         return {
             form: {
-                register: this.register.bind(this),
-                subscribe: this.subscribe.bind(this),
-                getValue: this.getValue.bind(this),
-                setValue: this.setValue.bind(this),
-                getMessage: this.getMessage.bind(this),
-                getFormProps: this.getFormProps.bind(this)
+                register: this.register,
+                subscribe: this.subscribe,
+                getValue: this.getValue,
+                setValue: this.setValue,
+                getMessage: this.getMessage,
+                getFormProps: this.getFormProps
             }
         };
-    }
+    },
+
+    componentWillMount() {
+        const { values } = this.props;
+        this.values = { ...values };
+        this.inputs = {};
+        this.listeners = [];
+    },
 
     componentDidMount() {
         // Now all inputs are registered
         this.collectValues();
-    }
+    },
 
     componentWillReceiveProps(nextProps) {
         this.collectValues(nextProps);
-    }
+    },
 
     componentDidUpdate() {
         this.collectValues();
-    }
+    },
 
     handleSubmit(event) {
         const { onSubmit } = this.props;
@@ -72,7 +74,7 @@ export default class Form extends React.Component {
             event.preventDefault();
             onSubmit(this.values);
         }
-    }
+    },
 
     collectValues(props = this.props) {
         const { inputs } = this;
@@ -91,7 +93,7 @@ export default class Form extends React.Component {
 
         this.values = values;
         this.notify();
-    }
+    },
 
     register(name, initialValue) {
         invariant(
@@ -110,7 +112,7 @@ export default class Form extends React.Component {
             }
             this.inputs = inputs;
         };
-    }
+    },
 
     subscribe(listener) {
         this.listeners.push(listener);
@@ -118,12 +120,12 @@ export default class Form extends React.Component {
             const index = this.listeners.indexOf(listener);
             this.listeners.splice(index, 1);
         };
-    }
+    },
 
     getValue(key) {
         const values = this.values;
         return getPath(values, key) || values[key];
-    }
+    },
 
     setValue(key, value) {
         const mutation = makePath(key + '.$set', value);
@@ -134,21 +136,21 @@ export default class Form extends React.Component {
 
         this.values = values;
         this.notify();
-    }
+    },
 
     getMessage(key) {
         const { messages } = this.props;
         return getPath(messages, key) || messages[key];
-    }
+    },
 
     getFormProps() {
         const { children, ...props } = this.props;
         return props;
-    }
+    },
 
     notify() {
         this.listeners.forEach(listener => listener());
-    }
+    },
 
     render() {
         const values = this.values;
@@ -156,7 +158,7 @@ export default class Form extends React.Component {
         return (
             <form
                 {...props}
-                onSubmit={this.handleSubmit.bind(this)}>
+                onSubmit={this.handleSubmit}>
                 {typeof children === 'function'
                     ? children(messages, values)
                     : children
@@ -164,4 +166,4 @@ export default class Form extends React.Component {
             </form>
         );
     }
-}
+});

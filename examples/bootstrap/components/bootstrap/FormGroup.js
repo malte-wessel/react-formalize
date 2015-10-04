@@ -1,13 +1,15 @@
 import { Message } from 'react-formalize';
-import React, { Component, PropTypes } from 'react';
+import React, { createClass, PropTypes } from 'react';
 
-export default class FormGroup extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'FormGroup',
+
+    propTypes: {
         name: PropTypes.string,
         label: PropTypes.string,
         children: PropTypes.node
-    }
+    },
 
     renderGroup(message) {
         const { label, children } = this.props;
@@ -23,11 +25,11 @@ export default class FormGroup extends Component {
                 </div>
             </div>
         );
-    }
+    },
 
     render() {
         const { name, ...props } = this.props;
-        if (name) return <Message name={name}>{this.renderGroup.bind(this)}</Message>;
+        if (name) return <Message name={name}>{this.renderGroup}</Message>;
         return this.renderGroup();
     }
-}
+});

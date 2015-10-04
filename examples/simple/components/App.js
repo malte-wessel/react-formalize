@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { createClass } from 'react';
 import {
     Form,
     Text,
@@ -11,15 +11,17 @@ const defaultValues = {
     title: 'Hello World'
 };
 
-export default class App extends Component {
+export default createClass({
+
+    displayName: 'App',
 
     handleChange(values) {
         console.info('Change', values);
-    }
+    },
 
     handleSubmit(values) {
         console.info('Submit', values);
-    }
+    },
 
     render() {
         return (
@@ -69,4 +71,4 @@ export default class App extends Component {
             </div>
         );
     }
-}
+});

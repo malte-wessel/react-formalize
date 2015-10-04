@@ -1,23 +1,20 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import Input from '../Input';
 
-export default class Checkbox extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Checkbox',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         checked: PropTypes.bool
-    }
-
-    constructor(props, context) {
-        super(props, context);
-        this.renderInput = this.renderInput.bind(this);
-    }
+    },
 
     serialize(event) {
         const target = event.target;
         const { checked } = target;
         return checked;
-    }
+    },
 
     renderInput(props) {
         const { value, disabled, ...restProps } = props;
@@ -27,7 +24,7 @@ export default class Checkbox extends Component {
             checked={value}
             disabled={disabled}
             {...restProps}/>;
-    }
+    },
 
     render() {
         const { checked, ...props } = this.props;
@@ -37,4 +34,4 @@ export default class Checkbox extends Component {
             </Input>
         );
     }
-}
+});

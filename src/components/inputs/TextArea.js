@@ -1,20 +1,17 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import Input from '../Input';
 
-export default class TextArea extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'TextArea',
+
+    propTypes: {
         name: PropTypes.string.isRequired
-    }
-
-    constructor(props, context) {
-        super(props, context);
-        this.renderInput = this.renderInput.bind(this);
-    }
+    },
 
     renderInput(props) {
         return <textarea {...props}/>;
-    }
+    },
 
     render() {
         return (
@@ -23,4 +20,4 @@ export default class TextArea extends Component {
             </Input>
         );
     }
-}
+});

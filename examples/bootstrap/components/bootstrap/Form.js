@@ -1,11 +1,13 @@
 import { Form as FormBase } from 'react-formalize';
-import React, { Component, PropTypes } from 'react';
+import React, { createClass, PropTypes } from 'react';
 
-export default class Form extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Form',
+
+    propTypes: {
         children: PropTypes.node
-    }
+    },
 
     render() {
         const { children, ...props } = this.props;
@@ -23,4 +25,4 @@ export default class Form extends Component {
             }</FormBase>
         );
     }
-}
+});

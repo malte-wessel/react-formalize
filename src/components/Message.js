@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import formShape from '../utils/formShape';
 import shallowEqual from '../utils/shallowEqual';
 
@@ -6,39 +6,48 @@ function defaultRenderMessage(message) {
     return <p>{message}</p>;
 }
 
-export default class Message extends React.Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Message',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         renderMessage: PropTypes.func,
         children: PropTypes.func
-    };
+    },
 
-    static defaultProps = {
-        renderMessage: defaultRenderMessage
-    }
-
-    static contextTypes = {
+    contextTypes: {
         form: formShape
-    };
+    },
 
-    constructor(props, context) {
-        super(props, context);
-        const { name } = props;
-        const { form } = context;
-        const { subscribe, getMessage } = form;
-        this.handleFormDataChange = this.handleFormDataChange.bind(this);
+    getDefaultProps() {
+        return {
+            renderMessage: defaultRenderMessage
+        };
+    },
+
+    getInitialState() {
+        const { name } = this.props;
+        const { form } = this.context;
+        const { getMessage } = form;
+        return {
+            message: getMessage(name)
+        };
+    },
+
+    componentWillMount() {
+        const { form } = this.context;
+        const { subscribe } = form;
         this.unsubscribe = subscribe(this.handleFormDataChange);
-        this.state = { message: getMessage(name)};
-    }
+    },
 
     shouldComponentUpdate(nextProps, nextState) {
         return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
-    }
+    },
 
     componentWillUnmount() {
         this.unsubscribe();
-    }
+    },
 
     handleFormDataChange() {
         const { name } = this.props;
@@ -48,7 +57,7 @@ export default class Message extends React.Component {
         const nextMessage = getMessage(name);
         if (message === nextMessage) return;
         this.setState({ message: nextMessage });
-    }
+    },
 
     render() {
         const { renderMessage, children, ...props } = this.props;
@@ -61,4 +70,4 @@ export default class Message extends React.Component {
         if (message) return renderMessage(message);
         return false;
     }
-}
+});

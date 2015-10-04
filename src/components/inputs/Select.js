@@ -1,19 +1,16 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, createClass } from 'react';
 import Input from '../Input';
 
-export default class Select extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Select',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         options: PropTypes.object,
         children: PropTypes.node,
         placeholder: PropTypes.string
-    }
-
-    constructor(props, context) {
-        super(props, context);
-        this.renderInput = this.renderInput.bind(this);
-    }
+    },
 
     serialize(event) {
         const target = event.target;
@@ -30,7 +27,7 @@ export default class Select extends Component {
         }
 
         return value;
-    }
+    },
 
     renderOptions(options, multiple, placeholder) {
         const children = [];
@@ -58,7 +55,7 @@ export default class Select extends Component {
             );
         }
         return children;
-    }
+    },
 
     renderInput(props) {
         const {
@@ -83,7 +80,7 @@ export default class Select extends Component {
                     : children}
             </select>
         );
-    }
+    },
 
     render() {
         const {children, value, multiple, ...props} = this.props;
@@ -100,4 +97,4 @@ export default class Select extends Component {
             </Input>
         );
     }
-}
+});

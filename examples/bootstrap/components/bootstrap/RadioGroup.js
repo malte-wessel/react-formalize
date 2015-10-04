@@ -1,12 +1,14 @@
 import { RadioGroup as RadioGroupBase } from 'react-formalize';
-import React, { Component, PropTypes } from 'react';
+import React, { createClass, PropTypes } from 'react';
 
-export default class RadioGroup extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'RadioGroup',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         options: PropTypes.object.isRequired
-    }
+    },
 
     renderOptions(options, Radio) {
         const children = [];
@@ -24,7 +26,7 @@ export default class RadioGroup extends Component {
             );
         }
         return <div>{children}</div>;
-    }
+    },
 
     render() {
         const { name, options, children, ...props } = this.props;
@@ -34,4 +36,4 @@ export default class RadioGroup extends Component {
             </RadioGroupBase>
         );
     }
-}
+});

@@ -1,12 +1,14 @@
 import { Checkbox as CheckboxBase } from 'react-formalize';
-import React, { Component, PropTypes } from 'react';
+import React, { createClass, PropTypes } from 'react';
 
-export default class Checkbox extends Component {
+export default createClass({
 
-    static propTypes = {
+    displayName: 'Checkbox',
+
+    propTypes: {
         name: PropTypes.string.isRequired,
         label: PropTypes.string.isRequired
-    }
+    },
 
     render() {
         const { name, label, children, ...props } = this.props;
@@ -18,4 +20,4 @@ export default class Checkbox extends Component {
             </div>
         );
     }
-}
+});

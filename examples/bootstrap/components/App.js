@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { createClass } from 'react';
 
 import { Text, Select, TextArea } from 'react-formalize';
 
@@ -7,17 +7,18 @@ import FormGroup from './bootstrap/FormGroup';
 import Checkbox from './bootstrap/Checkbox';
 import RadioGroup from './bootstrap/RadioGroup';
 
-export default class App extends Component {
+export default createClass({
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
+    displayName: 'App',
+
+    getInitialState() {
+        return {
             saving: false,
             post: {
                 categories: ['articles', 'react']
             }
         };
-    }
+    },
 
     validate(values) {
         const { title, categories, text } = values;
@@ -30,11 +31,11 @@ export default class App extends Component {
             return errors;
         }
         return undefined;
-    }
+    },
 
     onChange(post) {
         console.info('onChange', post);
-    }
+    },
 
     onSubmit(post) {
         console.info('onSubmit', post);
@@ -45,7 +46,7 @@ export default class App extends Component {
             setTimeout(() => this.setState({ saving: false}), 2000);
         }
         this.setState({ messages, post, saving });
-    }
+    },
 
     render() {
         const { post, messages, saving } = this.state;
@@ -68,8 +69,8 @@ export default class App extends Component {
                             <h1>Bootstrap Form Example</h1>
                         </div>
                         <Form
-                            onSubmit={this.onSubmit.bind(this)}
-                            onChange={this.onChange.bind(this)}
+                            onSubmit={this.onSubmit}
+                            onChange={this.onChange}
                             values={post}
                             messages={messages}
                             disabled={saving}>
@@ -103,4 +104,4 @@ export default class App extends Component {
             </div>
         );
     }
-}
+});
