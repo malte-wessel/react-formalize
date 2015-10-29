@@ -94,6 +94,8 @@ export default createClass({
         const { children, ...props } = this.props;
         const { value, disabled } = this.state;
         const onChange = this.handleChange;
-        return children({ ...props, value, disabled, onChange });
+        const onCut = this.handleChange;
+        const onPaste = this.handleChange;
+        return children({ ...props, value, disabled, onChange, onCut, onPaste });
     }
 });

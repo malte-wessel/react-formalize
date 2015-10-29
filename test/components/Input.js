@@ -55,7 +55,7 @@ describe('Input', () => {
         expect(propsResult.baz).toEqual('qux');
     });
 
-    it('should propagate changes', () => {
+    it('should propagate onChange', () => {
         const tree = renderIntoDocument(
             <Form>
                 <Input name="foo">
@@ -66,6 +66,44 @@ describe('Input', () => {
 
         const domInput = findDOMNode(findRenderedDOMComponentWithTag(tree, 'input'));
         Simulate.change(domInput, {target: {value: 'bar'}});
+
+        const input = findRenderedComponentWithType(tree, Input);
+        const form = findRenderedComponentWithType(tree, Form);
+
+        expect(input.state.value).toEqual('bar');
+        expect(form.values).toEqual({ foo: 'bar' });
+    });
+
+    it('should propagate onPaste', () => {
+        const tree = renderIntoDocument(
+            <Form>
+                <Input name="foo">
+                    {props => <input {...props}/>}
+                </Input>
+            </Form>
+        );
+
+        const domInput = findDOMNode(findRenderedDOMComponentWithTag(tree, 'input'));
+        Simulate.paste(domInput, {target: {value: 'bar'}});
+
+        const input = findRenderedComponentWithType(tree, Input);
+        const form = findRenderedComponentWithType(tree, Form);
+
+        expect(input.state.value).toEqual('bar');
+        expect(form.values).toEqual({ foo: 'bar' });
+    });
+
+    it('should propagate onCut', () => {
+        const tree = renderIntoDocument(
+            <Form>
+                <Input name="foo">
+                    {props => <input {...props}/>}
+                </Input>
+            </Form>
+        );
+
+        const domInput = findDOMNode(findRenderedDOMComponentWithTag(tree, 'input'));
+        Simulate.cut(domInput, {target: {value: 'bar'}});
 
         const input = findRenderedComponentWithType(tree, Input);
         const form = findRenderedComponentWithType(tree, Form);
