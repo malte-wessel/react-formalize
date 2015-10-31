@@ -1,6 +1,5 @@
 import React, { PropTypes, createClass } from 'react';
 import formShape from '../utils/formShape';
-import shallowEqual from '../utils/shallowEqual';
 
 function defaultRenderMessage(message) {
     return <p>{message}</p>;
@@ -39,10 +38,6 @@ export default createClass({
         const { form } = this.context;
         const { subscribe } = form;
         this.unsubscribe = subscribe(this.handleFormDataChange);
-    },
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
     },
 
     componentWillUnmount() {
