@@ -198,7 +198,10 @@ describe('Select', () => {
                     : { qux: 'fax' };
                 return (
                     <Form>
-                        <Select name="foo" options={options}/>
+                        <Select
+                            placeholder="placeholder"
+                            name="foo"
+                            options={options}/>
                     </Form>
                 );
             }
@@ -206,11 +209,13 @@ describe('Select', () => {
 
         const tree = renderIntoDocument(<Root/>);
         const root = findRenderedComponentWithType(tree, Root);
-        const option = findRenderedDOMComponentWithTag(tree, 'option');
-        expect(option.value).toEqual('qux');
+        const option = scryRenderedDOMComponentsWithTag(tree, 'option');
+        expect(option[0].value).toEqual('');
+        expect(option[1].value).toEqual('qux');
         root.setState({ odd: true}, () => {
-            const option2 = findRenderedDOMComponentWithTag(tree, 'option');
-            expect(option2.value).toEqual('foo');
+            const option2 = scryRenderedDOMComponentsWithTag(tree, 'option');
+            expect(option2[0].value).toEqual('');
+            expect(option2[1].value).toEqual('foo');
             done();
         });
     });
