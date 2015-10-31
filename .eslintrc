@@ -12,6 +12,8 @@
     "indent": [2, 4, {"SwitchCase": 1}],
     "comma-dangle": 0,
     "react/jsx-boolean-value": 0,
+    "react/no-multi-comp": 0,
+    "react/prop-types": 0,
     "id-length": 0
   },
   "plugins": [
