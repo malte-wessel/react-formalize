@@ -3,7 +3,6 @@ import { findDOMNode } from 'react-dom';
 import {
     renderIntoDocument,
     findRenderedComponentWithType,
-    findRenderedDOMComponentWithTag,
     scryRenderedDOMComponentsWithTag
 } from 'react/lib/ReactTestUtils';
 
