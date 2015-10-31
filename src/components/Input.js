@@ -20,9 +20,9 @@ export default createClass({
             React.PropTypes.number,
             React.PropTypes.object,
             React.PropTypes.string
-       ]),
-       serialize: PropTypes.func,
-       children: PropTypes.func
+        ]),
+        serialize: PropTypes.func,
+        children: PropTypes.func
     },
 
     contextTypes: {

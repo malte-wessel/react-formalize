@@ -36,7 +36,7 @@ export default createClass({
 
     renderOptions(Radio, options) {
         const children = [];
-        for (let value in options) {
+        for (const value in options) {
             if (!options.hasOwnProperty(value)) continue;
             const label = options[value];
             children.push(

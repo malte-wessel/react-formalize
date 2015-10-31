@@ -82,9 +82,9 @@ export default createClass({
 
         // Run through registered inputs and create an object path with
         // the initial value, given by the input
-        for (let path in inputs) {
+        for (const path in inputs) {
             if (!inputs.hasOwnProperty(path)) continue;
-            let initialValue = inputs[path];
+            const initialValue = inputs[path];
             setPath(inputData, path, initialValue);
         }
 
@@ -105,7 +105,7 @@ export default createClass({
         this.inputs[name] = initialValue;
         return () => {
             const inputs = {};
-            for (let key in this.inputs) {
+            for (const key in this.inputs) {
                 if (!this.inputs.hasOwnProperty(key)) continue;
                 if (key === name) continue;
                 inputs[key] = this.inputs[key];

@@ -18,12 +18,14 @@ export default createClass({
 
     renderInput(props) {
         const { value, disabled, ...restProps } = props;
-        return <input
-            type="checkbox"
-            value={true}
-            checked={value}
-            disabled={disabled}
-            {...restProps}/>;
+        return (
+            <input
+                type="checkbox"
+                value={true}
+                checked={value}
+                disabled={disabled}
+                {...restProps}/>
+        );
     },
 
     render() {
