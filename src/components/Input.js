@@ -56,12 +56,23 @@ export default createClass({
     },
 
     componentWillUpdate(nextProps) {
-        if (shallowEqual(this.props, nextProps)) return;
         const { form } = this.context;
         const { register } = form;
-        const { name, value } = nextProps;
+
+        const { value: nextValue, name: nextName } = nextProps;
+        const { value: propsValue, name } = this.props;
+        const { value: stateValue } = this.state;
+        // Regard uncontrolled inputs, that save value in state
+        const value = propsValue || stateValue;
+
+        if (name === nextName && value === nextValue) return;
+
+        const finalValue = name === nextName
+            ? nextValue || stateValue
+            : nextValue;
+
         this.unregister();
-        this.unregister = register(name, value);
+        this.unregister = register(nextName, finalValue);
     },
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -78,6 +89,7 @@ export default createClass({
         const { form } = this.context;
         const { setValue } = form;
         const value = serialize(...args);
+        this.setState({ value });
         setValue(name, value);
     },
 

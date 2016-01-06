@@ -190,10 +190,39 @@ describe('Form', () => {
 
         root.setState({ odd: true}, () => {
             expect(form.values).toEqual({ foo: 'bar', bar: 'doo' });
-            expect(form.inputs).toEqual({ foo: 'bar2', bar: null });
+            expect(form.inputs).toEqual({ foo: 'bar2', bar: 'noo' });
             expect(text1.value).toEqual('bar');
             expect(text2.value).toEqual('doo');
             done();
         });
+    });
+
+    it('should support uncontrolled inputs', done => {
+        class Root extends Component {
+            render() {
+                return (
+                    <Form>
+                        <Text name="foo"/> :
+                    </Form>
+                );
+            }
+        }
+
+        const tree = renderIntoDocument(<Root/>);
+        const root = findRenderedComponentWithType(tree, Root);
+        const form = findRenderedComponentWithType(tree, Form);
+        const input = findRenderedComponentWithType(tree, Text);
+        const $input = findDOMNode(input);
+        $input.value = 'bar';
+        Simulate.change($input);
+
+        expect(form.values).toEqual({ foo: 'bar' });
+        expect($input.value).toEqual('bar');
+
+        root.setState({ rerender: true}, () => {
+            expect(form.values).toEqual({ foo: 'bar' });
+            expect($input.value).toEqual('bar');
+        });
+        done();
     });
 });
