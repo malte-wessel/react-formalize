@@ -22,6 +22,7 @@ export default createClass({
             React.PropTypes.string
         ]),
         serialize: PropTypes.func,
+        connected: PropTypes.bool,
         children: PropTypes.func
     },
 
@@ -31,6 +32,7 @@ export default createClass({
 
     getDefaultProps() {
         return {
+            connected: true,
             value: null,
             serialize: defaultSerialize
         };
@@ -39,7 +41,10 @@ export default createClass({
     getInitialState() {
         const { form } = this.context;
         const { getValue } = form;
-        const { name, value } = this.props;
+        const { name, value, connected } = this.props;
+        if (connected === false) {
+            return { value: undefined, disabled: false };
+        }
         return {
             value: getValue(name) || value,
             disabled: false
@@ -49,13 +54,19 @@ export default createClass({
     componentWillMount() {
         const { form } = this.context;
         const { register, subscribe } = form;
-        const { name, value } = this.props;
+        const { name, value, connected } = this.props;
+
+        if (connected === false) return;
 
         this.unregister = register(name, value);
         this.unsubscribe = subscribe(this.handleFormDataChange);
     },
 
     componentWillUpdate(nextProps) {
+        const { connected } = this.props;
+
+        if (connected === false) return;
+
         const { form } = this.context;
         const { register } = form;
 
@@ -80,15 +91,23 @@ export default createClass({
     },
 
     componentWillUnmount() {
+        const { connected } = this.props;
+        if (connected === false) return;
         this.unregister();
         this.unsubscribe();
     },
 
     handleChange(...args) {
-        const { name, serialize } = this.props;
+        const { name, serialize, connected, onChange } = this.props;
         const { form } = this.context;
         const { setValue } = form;
         const value = serialize(...args);
+
+        if (connected === false) {
+            if (!onChange) return;
+            onChange(value);
+            return;
+        }
         this.setState({ value });
         setValue(name, value);
     },
@@ -103,11 +122,16 @@ export default createClass({
     },
 
     render() {
-        const { children, ...props } = this.props;
+        const { children, connected, ...props } = this.props;
         const { value, disabled } = this.state;
         const onChange = this.handleChange;
         const onCut = this.handleChange;
         const onPaste = this.handleChange;
+
+        if (connected === false) {
+            return children({ ...props, onChange, onCut, onPaste });
+        }
+
         return children({ ...props, value, disabled, onChange, onCut, onPaste });
     }
 });
