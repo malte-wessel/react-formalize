@@ -71,13 +71,17 @@ export default createClass({
 
     renderInput(props) {
         const {
-            options,
             multiple,
-            placeholder,
             children
         } = this.props;
 
-        const { value, ...restProps } = props;
+        const {
+            value,
+            options,
+            placeholder,
+            ...restProps
+        } = props;
+
         let finalValue = value;
         if (placeholder && !value) {
             // Set empty string as default value.
