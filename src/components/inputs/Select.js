@@ -1,6 +1,10 @@
 import React, { PropTypes, createClass } from 'react';
 import Input from '../Input';
 
+function defaultRenderOption(props) {
+    return <option {...props}/>;
+}
+
 export default createClass({
 
     displayName: 'Select',
@@ -9,7 +13,14 @@ export default createClass({
         name: PropTypes.string.isRequired,
         options: PropTypes.object,
         children: PropTypes.node,
-        placeholder: PropTypes.string
+        placeholder: PropTypes.any,
+        renderOption: PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            renderOption: defaultRenderOption
+        };
     },
 
     serialize(event) {
@@ -30,16 +41,17 @@ export default createClass({
     },
 
     renderOptions(options, multiple, placeholder) {
+        const { renderOption } = this.props;
         const children = [];
 
         if (!multiple && placeholder) {
             children.push(
-                <option
-                    key="placeholder"
-                    value=""
-                    disabled>
-                    {placeholder}
-                </option>
+                renderOption({
+                    key: 'placeholder',
+                    value: '',
+                    disabled: true,
+                    children: placeholder
+                })
             );
         }
 
@@ -47,11 +59,11 @@ export default createClass({
             if (!options.hasOwnProperty(value)) continue;
             const label = options[value];
             children.push(
-                <option
-                    key={value}
-                    value={value}>
-                    {label}
-                </option>
+                renderOption({
+                    key: value,
+                    value: value,
+                    children: label
+                })
             );
         }
         return children;
