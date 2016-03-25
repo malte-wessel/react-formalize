@@ -1,7 +1,7 @@
 import React, { PropTypes, createClass } from 'react';
-import Input from '../Input';
+import createInput from '../createInput';
 
-export default createClass({
+const TextArea = createClass({
 
     displayName: 'TextArea',
 
@@ -9,15 +9,9 @@ export default createClass({
         name: PropTypes.string.isRequired
     },
 
-    renderInput(props) {
-        return <textarea {...props}/>;
-    },
-
     render() {
-        return (
-            <Input {...this.props}>
-                {this.renderInput}
-            </Input>
-        );
+        return <textarea {...this.props}/>;
     }
 });
+
+export default createInput(TextArea);

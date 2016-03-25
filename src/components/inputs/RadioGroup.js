@@ -1,11 +1,12 @@
 import React, { PropTypes, createClass } from 'react';
-import Input from '../Input';
+import createInput from '../createInput';
 
 function radio(name, selectedValue, disabled, onChange) {
     return createClass({
-
         displayName: 'Radio',
-
+        handleChange() {
+            onChange(this.props.value);
+        },
         render() {
             return (
                 <input
@@ -14,13 +15,17 @@ function radio(name, selectedValue, disabled, onChange) {
                     name={name}
                     checked={this.props.value === selectedValue}
                     disabled={disabled}
-                    onChange={onChange.bind(null, this.props.value)} />
+                    onChange={this.handleChange} />
             );
         }
     });
 }
 
-export default createClass({
+function serialize(value) {
+    return value;
+}
+
+const RadioGroup = createClass({
 
     displayName: 'RadioGroup',
 
@@ -28,10 +33,6 @@ export default createClass({
         name: PropTypes.string.isRequired,
         children: PropTypes.func,
         options: PropTypes.object
-    },
-
-    serialize(value) {
-        return value;
     },
 
     renderOptions(Radio, options) {
@@ -50,22 +51,14 @@ export default createClass({
         return children;
     },
 
-    renderInput(props) {
-        const { children, options } = this.props;
-        const { name, value, disabled, onChange } = props;
+    render() {
+        const { children, options, name, value, disabled, onChange } = this.props;
         const Radio = radio(name, value, disabled, onChange);
         const renderedChildren = options
             ? <div>{this.renderOptions(Radio, options)}</div>
             : children(Radio);
         return renderedChildren;
-    },
-
-    render() {
-        const {children, options, ...props} = this.props;
-        return (
-            <Input serialize={this.serialize} {...props}>
-                {this.renderInput}
-            </Input>
-        );
     }
 });
+
+export default createInput(RadioGroup, serialize);

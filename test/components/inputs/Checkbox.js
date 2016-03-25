@@ -26,7 +26,7 @@ describe('Checkbox', () => {
     it('should propagate own value', () => {
         const tree = renderIntoDocument(
             <Form>
-                <Checkbox name="foo" checked/>
+                <Checkbox name="foo" value={true}/>
             </Form>
         );
 

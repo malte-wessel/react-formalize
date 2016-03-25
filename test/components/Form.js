@@ -47,7 +47,7 @@ describe('Form', () => {
         expect(form.values).toEqual(values);
     });
 
-    it('should merge values from its input child components', () => {
+    it.only('should merge values from its input child components', () => {
         const values = { foo: 'faz', boo: 'baz' };
 
         const tree = renderIntoDocument(
@@ -64,7 +64,7 @@ describe('Form', () => {
             boo: 'baz',
             qux: {
                 boo: 'bar',
-                qoo: null
+                qoo: ''
             }
         });
     });
@@ -195,34 +195,5 @@ describe('Form', () => {
             expect(text2.value).toEqual('doo');
             done();
         });
-    });
-
-    it('should support uncontrolled inputs', done => {
-        class Root extends Component {
-            render() {
-                return (
-                    <Form>
-                        <Text name="foo"/> :
-                    </Form>
-                );
-            }
-        }
-
-        const tree = renderIntoDocument(<Root/>);
-        const root = findRenderedComponentWithType(tree, Root);
-        const form = findRenderedComponentWithType(tree, Form);
-        const input = findRenderedComponentWithType(tree, Text);
-        const $input = findDOMNode(input);
-        $input.value = 'bar';
-        Simulate.change($input);
-
-        expect(form.values).toEqual({ foo: 'bar' });
-        expect($input.value).toEqual('bar');
-
-        root.setState({ rerender: true}, () => {
-            expect(form.values).toEqual({ foo: 'bar' });
-            expect($input.value).toEqual('bar');
-        });
-        done();
     });
 });

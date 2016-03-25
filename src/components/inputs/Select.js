@@ -1,11 +1,28 @@
 import React, { PropTypes, createClass } from 'react';
-import Input from '../Input';
+import createInput from '../createInput';
 
 function defaultRenderOption(props) {
     return <option {...props}/>;
 }
 
-export default createClass({
+function serialize(event) {
+    const target = event.target;
+    const { value, type } = target;
+
+    if (type === 'select-multiple') {
+        const values = [];
+        const { options } = target;
+        for (let i = 0, l = options.length; i < l; i++) {
+            const option = options[i];
+            if (option.selected) values.push(option.value);
+        }
+        return values;
+    }
+
+    return value;
+}
+
+const Select = createClass({
 
     displayName: 'Select',
 
@@ -21,23 +38,6 @@ export default createClass({
         return {
             renderOption: defaultRenderOption
         };
-    },
-
-    serialize(event) {
-        const target = event.target;
-        const { value, type } = target;
-
-        if (type === 'select-multiple') {
-            const values = [];
-            const { options } = target;
-            for (let i = 0, l = options.length; i < l; i++) {
-                const option = options[i];
-                if (option.selected) values.push(option.value);
-            }
-            return values;
-        }
-
-        return value;
     },
 
     renderOptions(options, multiple, placeholder) {
@@ -69,18 +69,15 @@ export default createClass({
         return children;
     },
 
-    renderInput(props) {
+    render() {
         const {
             multiple,
-            children
-        } = this.props;
-
-        const {
+            children,
             value,
             options,
             placeholder,
-            ...restProps
-        } = props;
+            ...props
+        } = this.props;
 
         let finalValue = value;
         if (placeholder && !value) {
@@ -88,29 +85,17 @@ export default createClass({
             // This will show up the placeholder option, when no value is set.
             finalValue = '';
         }
-
         return (
-            <select value={finalValue} {...restProps}>
+            <select
+                value={finalValue}
+                multiple={multiple}
+                {...props}>
                 {options
                     ? this.renderOptions(options, multiple, placeholder)
                     : children}
             </select>
         );
-    },
-
-    render() {
-        const {children, value, multiple, ...props} = this.props;
-        let finalValue = value;
-
-        if (multiple && !Array.isArray(value)) {
-            if (!value) finalValue = [];
-            else finalValue = [value];
-        }
-
-        return (
-            <Input serialize={this.serialize} value={finalValue} multiple={multiple} {...props}>
-                {this.renderInput}
-            </Input>
-        );
     }
 });
+
+export default createInput(Select, serialize);

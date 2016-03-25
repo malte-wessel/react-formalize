@@ -1,27 +1,29 @@
 import React, { PropTypes, createClass } from 'react';
-import Input from '../Input';
+import createInput from '../createInput';
 
-export default createClass({
+const types = [
+    'date',
+    'datetime',
+    'datetime-local',
+    'email',
+    'month',
+    'number',
+    'password',
+    'tel',
+    'text',
+    'time',
+    'search',
+    'url',
+    'week'
+];
+
+const Text = createClass({
 
     displayName: 'Text',
 
     propTypes: {
         name: PropTypes.string.isRequired,
-        type: PropTypes.oneOf([
-            'date',
-            'datetime',
-            'datetime-local',
-            'email',
-            'month',
-            'number',
-            'password',
-            'tel',
-            'text',
-            'time',
-            'search',
-            'url',
-            'week'
-        ])
+        type: PropTypes.oneOf(types)
     },
 
     getDefaultProps() {
@@ -30,15 +32,10 @@ export default createClass({
         };
     },
 
-    renderInput(props) {
-        return <input {...props}/>;
-    },
-
     render() {
-        return (
-            <Input {...this.props}>
-                {this.renderInput}
-            </Input>
-        );
+        console.log('Text.render', this.props);
+        return <input {...this.props}/>;
     }
 });
+
+export default createInput(Text);

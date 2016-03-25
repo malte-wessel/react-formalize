@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import {
     renderIntoDocument,
     findRenderedComponentWithType,
+    findRenderedDOMComponentWithTag,
     scryRenderedDOMComponentsWithTag
 } from 'react/lib/ReactTestUtils';
 
@@ -44,7 +45,7 @@ describe('Select', () => {
                 </Form>
             );
 
-            const input = findRenderedComponentWithType(tree, Select);
+            const input = findRenderedDOMComponentWithTag(tree, 'select');
             const $input = findDOMNode(input);
             expect($input.value).toEqual('bux');
             expect($input.childNodes[0].value).toEqual('bux');

@@ -1,7 +1,6 @@
 import React, { PropTypes, createClass } from 'react';
 import update from 'react-addons-update';
-import { set as setPath, get as getPath } from 'object-path';
-import merge from 'deepmerge';
+import { get as getPath } from 'object-path';
 import invariant from 'invariant';
 
 import formShape from '../utils/formShape';
@@ -12,15 +11,11 @@ export default createClass({
     displayName: 'Form',
 
     propTypes: {
-        children: PropTypes.oneOfType([
-            PropTypes.node,
-            PropTypes.func
-        ]),
         values: PropTypes.object,
         messages: PropTypes.object,
+        disabled: PropTypes.bool,
         onSubmit: PropTypes.func,
-        onChange: PropTypes.func,
-        disabled: PropTypes.bool
+        onChange: PropTypes.func
     },
 
     childContextTypes: {
@@ -49,68 +44,74 @@ export default createClass({
     },
 
     componentWillMount() {
-        const { values } = this.props;
-        this.values = { ...values };
-        this.inputs = {};
+        this.inputs = [];
         this.listeners = [];
     },
 
-    componentDidMount() {
-        // Now all inputs are registered
-        this.collectValues();
-    },
-
     componentWillReceiveProps(nextProps) {
-        this.collectValues(nextProps);
-    },
+        console.log('componentWillUpdate', this.props, nextProps);
+        this.nextProps = nextProps;
 
-    componentDidUpdate() {
-        this.collectValues();
-    },
+        const {
+            values: nextValues,
+            messages: nextMessages,
+            disabled: nextDisabled
+        } = nextProps;
 
-    handleSubmit(event) {
-        const { onSubmit } = this.props;
-        if (onSubmit) {
-            event.preventDefault();
-            onSubmit(this.values);
-        }
-    },
+        const {
+            values: prevValues,
+            messages: prevMessages,
+            disabled: prevDisabled
+        } = this.props;
 
-    collectValues(props = this.props) {
-        const { inputs } = this;
-        const inputData = {};
+        if (
+            prevValues === nextValues &&
+            prevMessages === nextMessages &&
+            prevDisabled === nextDisabled
+        ) return;
 
-        // Run through registered inputs and create an object path with
-        // the initial value, given by the input
-        for (const path in inputs) {
-            if (!inputs.hasOwnProperty(path)) continue;
-            const initialValue = inputs[path];
-            setPath(inputData, path, initialValue);
-        }
-
-        // Merge with current state
-        const values = merge(inputData, props.values);
-
-        this.values = values;
         this.notify();
     },
 
-    register(name, initialValue) {
+    componentDidUpdate() {
+        this.nextProps = undefined;
+    },
+
+    getMessage(key) {
+        const props = this.nextProps || this.props;
+        const { messages } = props;
+        return getPath(messages, key);
+    },
+
+    getFormProps() {
+        return this.nextProps || this.props;
+    },
+
+    getValue(key) {
+        const props = this.nextProps || this.props;
+        const { values } = props;
+        return getPath(values, key);
+    },
+
+    setValue(key, value) {
+        const mutation = makePath(key + '.$set', value);
+        const values = update(this.values, mutation);
+        const { onChange } = this.props;
+        if (onChange) onChange(values);
+    },
+
+    register(name) {
         invariant(
-            this.inputs[name] === undefined,
+            this.inputs.indexOf(name) < 0,
             'Naming conflict: there is already an input field with name `%s`',
             name
         );
-
-        this.inputs[name] = initialValue;
+        this.inputs.push(name);
         return () => {
-            const inputs = {};
-            for (const key in this.inputs) {
-                if (!this.inputs.hasOwnProperty(key)) continue;
-                if (key === name) continue;
-                inputs[key] = this.inputs[key];
-            }
-            this.inputs = inputs;
+            const { values, onChange } = this.props;
+            const idx = this.inputs.indexOf(name);
+            this.inputs.splice(idx, 1);
+            if (onChange) onChange({ ...values, [name]: undefined });
         };
     },
 
@@ -122,48 +123,31 @@ export default createClass({
         };
     },
 
-    getValue(key) {
-        const values = this.values;
-        return getPath(values, key) || values[key];
-    },
-
-    setValue(key, value) {
-        const mutation = makePath(key + '.$set', value);
-        const values = update(this.values, mutation);
-
-        const { onChange } = this.props;
-        if (onChange) onChange(values);
-
-        this.values = values;
-        this.notify();
-    },
-
-    getMessage(key) {
-        const { messages } = this.props;
-        return getPath(messages, key) || messages[key];
-    },
-
-    getFormProps() {
-        const { children, ...props } = this.props;
-        return props;
-    },
-
     notify() {
         this.listeners.forEach(listener => listener());
     },
 
+    handleSubmit(event) {
+        const { onSubmit } = this.props;
+        if (onSubmit) {
+            event.preventDefault();
+            onSubmit(this.values);
+        }
+    },
+
     render() {
-        const values = this.values;
-        const { onChange, onSubmit, messages, children, ...props } = this.props;
+        const {
+            values,
+            messages,
+            onSubmit,
+            onChange,
+            disabled,
+            ...props
+        } = this.props;
         return (
             <form
                 {...props}
-                onSubmit={this.handleSubmit}>
-                {typeof children === 'function'
-                    ? children(messages, values)
-                    : children
-                }
-            </form>
+                onSubmit={this.handleSubmit}/>
         );
     }
 });
