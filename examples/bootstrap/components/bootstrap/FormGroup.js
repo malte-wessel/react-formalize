@@ -1,18 +1,19 @@
-import { Message } from 'react-formalize';
+import { connectMessage } from 'react-formalize';
 import React, { createClass, PropTypes } from 'react';
 
-export default createClass({
+const FormGroup = createClass({
 
     displayName: 'FormGroup',
 
     propTypes: {
         name: PropTypes.string,
+        message: PropTypes.string,
         label: PropTypes.string,
         children: PropTypes.node
     },
 
-    renderGroup(message) {
-        const { label, children } = this.props;
+    render() {
+        const { name, message, label, children, ...props } = this.props;
         return (
             <div className={'form-group ' + (message ? 'has-error' : null)}>
                 <label className="col-sm-4 control-label">{label}</label>
@@ -25,11 +26,7 @@ export default createClass({
                 </div>
             </div>
         );
-    },
-
-    render() {
-        const { name, ...props } = this.props;
-        if (name) return <Message name={name}>{this.renderGroup}</Message>;
-        return this.renderGroup();
     }
 });
+
+export default connectMessage(FormGroup);

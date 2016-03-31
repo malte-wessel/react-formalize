@@ -5,17 +5,21 @@ import {
     TextArea,
     Checkbox,
     RadioGroup,
-    Select } from 'react-formalize';
-
-const defaultValues = {
-    title: 'Hello World'
-};
+    Select
+} from 'react-formalize';
 
 export default createClass({
 
     displayName: 'App',
 
+    getInitialState() {
+        return {
+            title: 'Hello World'
+        };
+    },
+
     handleChange(values) {
+        this.setState(values);
         console.info('Change', values);
     },
 
@@ -27,7 +31,7 @@ export default createClass({
         return (
             <div>
                 <h1>Simple example</h1>
-                <Form values={defaultValues} onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                <Form values={this.state} onSubmit={this.handleSubmit} onChange={this.handleChange}>
                     <div>
                         <label>Title</label>
                         <Text name="title"/>
@@ -42,7 +46,7 @@ export default createClass({
                     </div>
                     <div>
                         <label>Category</label>
-                        <Select name="subcategory" multiple={true}>
+                        <Select name="subcategory" multiple>
                             <option value="news">News</option>
                             <option value="sport">Sport</option>
                             <option value="technology">Technology</option>

@@ -1,4 +1,4 @@
-import { Checkbox as CheckboxBase } from 'react-formalize';
+import { Checkbox } from 'react-formalize';
 import React, { createClass, PropTypes } from 'react';
 
 export default createClass({
@@ -15,7 +15,7 @@ export default createClass({
         return (
             <div className="checkbox">
                 <label>
-                    <CheckboxBase name={name} {...props}/> {label}
+                    <Checkbox name={name} {...props}/> {label}
                </label>
             </div>
         );

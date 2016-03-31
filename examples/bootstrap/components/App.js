@@ -13,8 +13,9 @@ export default createClass({
 
     getInitialState() {
         return {
+            messages: {},
             saving: false,
-            post: {
+            values: {
                 categories: ['articles', 'react']
             }
         };
@@ -33,23 +34,24 @@ export default createClass({
         return undefined;
     },
 
-    onChange(post) {
-        console.info('onChange', post);
+    onChange(values) {
+        this.setState({ values });
+        console.info('onChange', values);
     },
 
-    onSubmit(post) {
-        console.info('onSubmit', post);
-        const messages = this.validate(post);
+    onSubmit(values) {
+        console.info('onSubmit', values);
+        const messages = this.validate(values);
         let saving = false;
         if (!messages) {
             saving = true;
-            setTimeout(() => this.setState({ saving: false}), 2000);
+            setTimeout(() => this.setState({ saving: false }), 2000);
         }
-        this.setState({ messages, post, saving });
+        this.setState({ messages, saving });
     },
 
     render() {
-        const { post, messages, saving } = this.state;
+        const { values, messages, saving } = this.state;
         const categories = {
             articles: 'Articles',
             react: 'React',
@@ -62,7 +64,7 @@ export default createClass({
             yes: 'Shou ads'
         };
         return (
-            <div className="container" style={{padding: '50px 0'}}>
+            <div className="container" style={{ padding: '50px 0' }}>
                 <div className="row">
                     <div className="col-sm-offset-2 col-sm-10">
                         <div className="page-header">
@@ -71,7 +73,7 @@ export default createClass({
                         <Form
                             onSubmit={this.onSubmit}
                             onChange={this.onChange}
-                            values={post}
+                            values={values}
                             messages={messages}
                             disabled={saving}>
                             <FormGroup name="title" label="Title">

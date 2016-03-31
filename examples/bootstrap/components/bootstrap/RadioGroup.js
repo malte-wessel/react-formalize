@@ -1,4 +1,4 @@
-import { RadioGroup as RadioGroupBase } from 'react-formalize';
+import { RadioGroup } from 'react-formalize';
 import React, { createClass, PropTypes } from 'react';
 
 export default createClass({
@@ -31,9 +31,9 @@ export default createClass({
     render() {
         const { name, options, children, ...props } = this.props;
         return (
-            <RadioGroupBase name={name}>
+            <RadioGroup name={name}>
                 {this.renderOptions.bind(this, options)}
-            </RadioGroupBase>
+            </RadioGroup>
         );
     }
 });
