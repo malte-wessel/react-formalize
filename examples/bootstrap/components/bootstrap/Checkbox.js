@@ -11,7 +11,7 @@ export default createClass({
     },
 
     render() {
-        const { name, label, children, ...props } = this.props;
+        const { name, label, ...props } = this.props;
         return (
             <div className="checkbox">
                 <label>

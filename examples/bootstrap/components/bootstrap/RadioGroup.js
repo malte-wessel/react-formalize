@@ -29,7 +29,7 @@ export default createClass({
     },
 
     render() {
-        const { name, options, children, ...props } = this.props;
+        const { name, options, ...props } = this.props;
         return (
             <RadioGroup name={name}>
                 {this.renderOptions.bind(this, options)}

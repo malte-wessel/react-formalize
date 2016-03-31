@@ -3,6 +3,9 @@ import connectInput from '../hoc/connectInput';
 
 const createRadio = (name, selectedValue, disabled, onChange) => createClass({
     displayName: 'Radio',
+    propTypes: {
+        value: PropTypes.string.isRequired
+    },
     handleChange() {
         const { value } = this.props;
         onChange(value);

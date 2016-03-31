@@ -1,9 +1,7 @@
 import React, { PropTypes, createClass } from 'react';
 import connectSelect from '../hoc/connectSelect';
 
-const defaultRenderOption = props => {
-    return <option {...props}/>;
-};
+const defaultRenderOption = props => <option {...props}/>;
 
 const Select = createClass({
 
@@ -16,6 +14,7 @@ const Select = createClass({
             PropTypes.string,
             PropTypes.array
         ]).isRequired,
+        multiple: PropTypes.bool,
         placeholder: PropTypes.any,
         renderOption: PropTypes.func,
         onChange: PropTypes.func.isRequired,
@@ -49,7 +48,7 @@ const Select = createClass({
             children.push(
                 renderOption({
                     key: value,
-                    value: value,
+                    value,
                     children: label
                 })
             );

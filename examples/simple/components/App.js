@@ -42,7 +42,7 @@ export default createClass({
                     </div>
                     <div>
                         <label>Category</label>
-                        <Select name="category" placeholder="Choose category..." options={{news: 'News', sport: 'Sport'}}/>
+                        <Select name="category" placeholder="Choose category..." options={{ news: 'News', sport: 'Sport' }}/>
                     </div>
                     <div>
                         <label>Category</label>

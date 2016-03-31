@@ -1,11 +1,13 @@
 {
-  "name": "react-formalize-example-simple",
+  "name": "react-formalize-example-bootstrap",
   "version": "0.1.0",
   "description": "Simple example",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
-  },
+   "start": "NODE_ENV=development node server.js",
+   "build": "NODE_ENV=production ./node_modules/.bin/webpack",
+   "build:pages": "npm run build && cp index.html ../../ && rm -rf ../../static && mv static ../../"
+ },
   "repository": {
     "type": "git",
     "url": "https://github.com/malte-wessel/react-formalize.git"
@@ -20,10 +22,9 @@
     "react-dom": "^15.0.0-rc.2"
   },
   "devDependencies": {
-    "babel-core": "^5.6.18",
-    "babel-loader": "^5.1.4",
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
     "node-libs-browser": "^0.5.2",
-    "react-hot-loader": "^1.2.7",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.9.0"
   }

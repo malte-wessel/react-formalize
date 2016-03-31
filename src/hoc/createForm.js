@@ -9,7 +9,7 @@ function cleanProps(props) {
 }
 
 function defaultUpdateValue(name, value, values) {
-    const mutation = makePath(name + '.$set', value);
+    const mutation = makePath(`${name}.$set`, value);
     return update(values, mutation);
 }
 

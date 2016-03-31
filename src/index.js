@@ -13,7 +13,7 @@ import Checkbox from './components/Checkbox';
 import Select from './components/Select';
 import RadioGroup from './components/RadioGroup';
 
-export default {
+export {
     // higher order functions
     connect,
     connectInput,

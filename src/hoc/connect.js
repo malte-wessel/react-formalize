@@ -34,15 +34,6 @@ export default function connect(Component, options = {}) {
             return this.getStateFromForm();
         },
 
-        getStateFromForm(wrapperProps = this.props, formProps = this.context.form.getFormProps()) {
-            return mapFormPropsToState(wrapperProps, formProps);
-        },
-
-        setStateFromForm(wrapperProps, formProps) {
-            const nextState = this.getStateFromForm(wrapperProps, formProps);
-            this.setState(nextState);
-        },
-
         componentWillMount() {
             // @TODO: Check for value property and warn if a value was given
             const { form } = this.context;
@@ -65,6 +56,15 @@ export default function connect(Component, options = {}) {
 
         componentWillUnmount() {
             this.unsubscribe();
+        },
+
+        getStateFromForm(wrapperProps = this.props, formProps = this.context.form.getFormProps()) {
+            return mapFormPropsToState(wrapperProps, formProps);
+        },
+
+        setStateFromForm(wrapperProps, formProps) {
+            const nextState = this.getStateFromForm(wrapperProps, formProps);
+            this.setState(nextState);
         },
 
         handleFormDataChange(formProps) {

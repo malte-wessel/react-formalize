@@ -21,19 +21,6 @@ export default createClass({
         };
     },
 
-    validate(values) {
-        const { title, categories, text } = values;
-        const errors = {};
-        if (!title) errors.title = 'Title is required';
-        if (categories.length < 1) errors.categories = 'Please select at least one category';
-        if (!text) errors.text = 'Text is required';
-
-        if (Object.keys(errors).length > 0) {
-            return errors;
-        }
-        return undefined;
-    },
-
     onChange(values) {
         this.setState({ values });
         console.info('onChange', values);
@@ -48,6 +35,19 @@ export default createClass({
             setTimeout(() => this.setState({ saving: false }), 2000);
         }
         this.setState({ messages, saving });
+    },
+
+    validate(values) {
+        const { title, categories, text } = values;
+        const errors = {};
+        if (!title) errors.title = 'Title is required';
+        if (categories.length < 1) errors.categories = 'Please select at least one category';
+        if (!text) errors.text = 'Text is required';
+
+        if (Object.keys(errors).length > 0) {
+            return errors;
+        }
+        return undefined;
     },
 
     render() {

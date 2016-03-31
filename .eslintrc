@@ -26,7 +26,8 @@
     "id-length": 0,
     "no-nested-ternary": 0,
     "no-param-reassign": 2,
-    "prefer-arrow-callback": 0
+    "prefer-arrow-callback": 0,
+    "arrow-body-style": 0
   },
   "plugins": [
     "react"

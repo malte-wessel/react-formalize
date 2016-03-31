@@ -1,43 +1,52 @@
+/* eslint no-var: 0, no-unused-vars: 0 */
+var path = require('path');
 var webpack = require('webpack');
+var runCoverage = process.env.COVERAGE === 'true';
 
-module.exports = function karmaConf(config) {
+var coverageLoaders = [];
+var coverageReporters = [];
+
+if (runCoverage) {
+    coverageLoaders.push({
+        test: /\.js$/,
+        include: path.resolve('src/'),
+        loader: 'isparta'
+    });
+    coverageReporters.push('coverage');
+}
+
+module.exports = function karmaConfig(config) {
     config.set({
-
-        browserNoActivityTimeout: 30000,
-
-        browsers: [ 'Chrome' ],
-
+        browsers: ['Chrome'],
         singleRun: true,
-
-        frameworks: [ 'mocha' ],
-
-        files: [
-            'tests.webpack.js'
-        ],
-
+        frameworks: ['mocha'],
+        files: ['./test.js'],
         preprocessors: {
-            'tests.webpack.js': [ 'webpack', 'sourcemap' ]
+            './test.js': ['webpack', 'sourcemap']
         },
-
-        reporters: [ 'mocha' ],
-
+        reporters: ['mocha'].concat(coverageReporters),
         webpack: {
             devtool: 'inline-source-map',
-            module: {
-                loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: 'babel' }
-                ]
+            resolve: {
+                alias: {
+                    'react-formalize': path.resolve(__dirname, './src')
+                }
             },
-            plugins: [
-                new webpack.DefinePlugin({
-                    'process.env.NODE_ENV': JSON.stringify('test')
-                })
-            ]
+            module: {
+                loaders: [{
+                    test: /\.js$/,
+                    loader: 'babel',
+                    exclude: /(node_modules)/
+                }].concat(coverageLoaders)
+            }
         },
-
-        webpackServer: {
-            noInfo: true
+        coverageReporter: {
+            dir: 'coverage/',
+            reporters: [
+                { type: 'html', subdir: 'report-html' },
+                { type: 'text', subdir: '.', file: 'text.txt' },
+                { type: 'text-summary', subdir: '.', file: 'text-summary.txt' },
+            ]
         }
-
     });
 };

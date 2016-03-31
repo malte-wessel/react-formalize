@@ -15,7 +15,7 @@ const FormGroup = createClass({
     render() {
         const { name, message, label, children, ...props } = this.props;
         return (
-            <div className={'form-group ' + (message ? 'has-error' : null)}>
+            <div className={`form-group ${message && 'has-error'}`}>
                 <label className="col-sm-4 control-label">{label}</label>
                 <div className="col-sm-8">
                     {children}

@@ -82,7 +82,7 @@ describe('Form', () => {
 
         const inputs = scryRenderedComponentsWithType(tree, Text);
         const input = findDOMNode(inputs[0]);
-        Simulate.change(input, {target: {value: 'baz'}});
+        Simulate.change(input, { target: { value: 'baz' } });
         expect(onChangeResult).toEqual({
             foo: 'baz',
             bar: 'foo'
@@ -103,7 +103,7 @@ describe('Form', () => {
         const input = findDOMNode(inputs[0]);
 
         const before = form.values;
-        Simulate.change(input, {target: {value: 'baz'}});
+        Simulate.change(input, { target: { value: 'baz' } });
         const after = form.values;
 
         expect(before === after).toBe(false);
@@ -129,7 +129,7 @@ describe('Form', () => {
         const root = findRenderedComponentWithType(tree, Root);
         const form = findRenderedComponentWithType(tree, Form);
 
-        root.setState({ foo: 'baz'}, () => {
+        root.setState({ foo: 'baz' }, () => {
             expect(form.values).toEqual({ foo: 'baz' });
             done();
         });
@@ -188,7 +188,7 @@ describe('Form', () => {
         expect(text1.value).toEqual('fax');
         expect(text2.value).toEqual('noo');
 
-        root.setState({ odd: true}, () => {
+        root.setState({ odd: true }, () => {
             expect(form.values).toEqual({ foo: 'bar', bar: 'doo' });
             expect(form.inputs).toEqual({ foo: 'bar2', bar: 'noo' });
             expect(text1.value).toEqual('bar');

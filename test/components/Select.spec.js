@@ -46,7 +46,7 @@ describe('Select', () => {
                     >
                     <Select
                         name="foo"
-                        options={{foo: 'bar', qux: 'qax'}}
+                        options={{ foo: 'bar', qux: 'qax' }}
                         placeholder="bun"/>
                 </Form>
             );
