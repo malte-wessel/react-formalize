@@ -35,7 +35,7 @@
     "eslint": "^1.8.0",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
-    "expect": "^1.6.0",
+    "expect": "^1.16.0",
     "karma": "^0.13.14",
     "karma-chrome-launcher": "^0.2.1",
     "karma-cli": "^0.1.1",
@@ -45,7 +45,7 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.3",
     "react": "^0.14.1",
-    "react-dom": "^0.14.1",
+    "react-dom": "^15.0.0-rc.2",
     "rimraf": "^2.3.4",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.2"
