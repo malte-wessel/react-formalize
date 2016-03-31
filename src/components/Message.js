@@ -1,68 +1,15 @@
 import React, { PropTypes, createClass } from 'react';
-import formShape from '../utils/formShape';
+import connectMessage from '../hoc/connectMessage';
 
-function defaultRenderMessage(message) {
-    return <p>{message}</p>;
-}
-
-export default createClass({
-
+const Message = createClass({
     displayName: 'Message',
-
     propTypes: {
-        name: PropTypes.string.isRequired,
-        renderMessage: PropTypes.func,
-        children: PropTypes.func
+        message: PropTypes.node
     },
-
-    contextTypes: {
-        form: formShape
-    },
-
-    getDefaultProps() {
-        return {
-            renderMessage: defaultRenderMessage
-        };
-    },
-
-    getInitialState() {
-        const { name } = this.props;
-        const { form } = this.context;
-        const { getMessage } = form;
-        return {
-            message: getMessage(name)
-        };
-    },
-
-    componentWillMount() {
-        const { form } = this.context;
-        const { subscribe } = form;
-        this.unsubscribe = subscribe(this.handleFormDataChange);
-    },
-
-    componentWillUnmount() {
-        this.unsubscribe();
-    },
-
-    handleFormDataChange() {
-        const { name } = this.props;
-        const { form } = this.context;
-        const { getMessage } = form;
-        const { message } = this.state;
-        const nextMessage = getMessage(name);
-        if (message === nextMessage) return;
-        this.setState({ message: nextMessage });
-    },
-
     render() {
-        const { renderMessage, children, ...props } = this.props;
-        const { message } = this.state;
-
-        if (children) {
-            return children(message, props);
-        }
-
-        if (message) return renderMessage(message);
-        return false;
+        const { message, ...props } = this.props;
+        return <div {...props}>{message}</div>;
     }
 });
+
+export default connectMessage(Message);

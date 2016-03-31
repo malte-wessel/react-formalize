@@ -1,26 +1,9 @@
 import React, { PropTypes, createClass } from 'react';
-import createInput from '../createInput';
+import connectSelect from '../hoc/connectSelect';
 
-function defaultRenderOption(props) {
+const defaultRenderOption = props => {
     return <option {...props}/>;
-}
-
-function serialize(event) {
-    const target = event.target;
-    const { value, type } = target;
-
-    if (type === 'select-multiple') {
-        const values = [];
-        const { options } = target;
-        for (let i = 0, l = options.length; i < l; i++) {
-            const option = options[i];
-            if (option.selected) values.push(option.value);
-        }
-        return values;
-    }
-
-    return value;
-}
+};
 
 const Select = createClass({
 
@@ -29,9 +12,14 @@ const Select = createClass({
     propTypes: {
         name: PropTypes.string.isRequired,
         options: PropTypes.object,
-        children: PropTypes.node,
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.array
+        ]).isRequired,
         placeholder: PropTypes.any,
-        renderOption: PropTypes.func
+        renderOption: PropTypes.func,
+        onChange: PropTypes.func.isRequired,
+        children: PropTypes.node,
     },
 
     getDefaultProps() {
@@ -85,6 +73,7 @@ const Select = createClass({
             // This will show up the placeholder option, when no value is set.
             finalValue = '';
         }
+
         return (
             <select
                 value={finalValue}
@@ -98,4 +87,4 @@ const Select = createClass({
     }
 });
 
-export default createInput(Select, serialize);
+export default connectSelect(Select);

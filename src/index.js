@@ -1,18 +1,29 @@
-import Form from './components/Form';
-import Input from './components/Input';
-import Message from './components/Message';
+import connect from './hoc/connect';
+import connectInput from './hoc/connectInput';
+import connectSelect from './hoc/connectSelect';
+import connectCheckbox from './hoc/connectCheckbox';
+import connectMessage from './hoc/connectMessage';
+import createForm from './hoc/createForm';
 
-import Text from './components/inputs/Text';
-import TextArea from './components/inputs/TextArea';
-import Checkbox from './components/inputs/Checkbox';
-import Select from './components/inputs/Select';
-import RadioGroup from './components/inputs/RadioGroup';
+import Form from './components/Form';
+import Message from './components/Message';
+import Text from './components/Text';
+import TextArea from './components/TextArea';
+import Checkbox from './components/Checkbox';
+import Select from './components/Select';
+import RadioGroup from './components/RadioGroup';
 
 export default {
+    // higher order functions
+    connect,
+    connectInput,
+    connectSelect,
+    connectCheckbox,
+    connectMessage,
+    createForm,
+    // components
     Form,
-    Input,
     Message,
-
     Text,
     TextArea,
     Checkbox,
