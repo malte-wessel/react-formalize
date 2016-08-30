@@ -12,6 +12,7 @@ const Select = createClass({
         options: PropTypes.object,
         value: PropTypes.oneOfType([
             PropTypes.string,
+            PropTypes.number,
             PropTypes.array
         ]).isRequired,
         multiple: PropTypes.bool,
