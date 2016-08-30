@@ -4,7 +4,7 @@ import connect from './connect';
 const mapFormPropsToState = (wrapperProps, formProps) => {
     const { messages, disabled } = formProps;
     const { name } = wrapperProps;
-    const message = name && getPath(messages, name);
+    const message = name && messages && (getPath(messages, name) || messages[name]);
     return { message, disabled };
 };
 
