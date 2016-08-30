@@ -58,11 +58,14 @@ const Select = createClass({
 
     render() {
         const {
-            multiple,
-            children,
-            value,
+            name,
             options,
+            value,
+            multiple,
             placeholder,
+            renderOption,
+            onChange,
+            children,
             ...props
         } = this.props;
 
@@ -77,6 +80,7 @@ const Select = createClass({
             <select
                 value={finalValue}
                 multiple={multiple}
+                onChange={onChange}
                 {...props}>
                 {options
                     ? this.renderOptions(options, multiple, placeholder)
